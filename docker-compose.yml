@@ -15,7 +15,7 @@ services:
     links:
       - db
     volumes:
-      - "./app:/app" #共有フォルダの設定
+      - "./web/app:/app" #共有フォルダの設定
     stdin_open: true
 
   db:
