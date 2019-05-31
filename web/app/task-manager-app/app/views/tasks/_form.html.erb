@@ -1,0 +1,11 @@
+<%= form_for(@task, url: tasks_create_path) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+
+  <div class="field">
+    <div class="control">
+      <%= f.text_field :name, class: "input", placeholder: "Name" %>
+    </div>
+    <%= hidden_field_tag :id, kanban.id %>
+  </div>
+  <%= f.submit "タスクを作成する", class: "button is-link" %>
+<% end %>

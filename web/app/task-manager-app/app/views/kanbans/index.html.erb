@@ -3,3 +3,34 @@
 <ul>
   <li><%= link_to "Log out", logout_path %></li>
 </ul>
+<div>
+  <% if @kanbans.any? %>
+    <div class="kanban-container">
+      <div class="columns">
+        <% @kanbans.each_with_index do |kanban, kanbanIndex| %>
+          <div class="column">
+            <div id="kanban-<%= kanbanIndex %>" class="card">
+              <div class="card-content">
+                <%= kanban.name %>
+                <div>タスク名</div>
+                <ul>
+                  <% kanban.tasks.each_with_index do |task, taskIndex| %>
+                    <li class="card">
+                    <%= task.name %>
+                    </li>
+                  <% end %>
+                </ul>
+                <div class="card card-content">
+                  <%= render 'tasks/form', kanban: kanban %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end%>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div>
+  <%= render 'form'%>
+</div>
