@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_145444) do
   enable_extension "plpgsql"
 
   create_table "kanbans", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_145444) do
 
   create_table "tasks", force: :cascade do |t|
     t.bigint "kanban_id"
-    t.string "name"
+    t.string "name", null: false
     t.date "deadline"
     t.boolean "complete_flg", default: false
     t.datetime "created_at", null: false

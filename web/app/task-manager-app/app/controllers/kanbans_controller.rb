@@ -1,9 +1,10 @@
 class KanbansController < ApplicationController
+  before_action :logged_in_user
+
   def index
-    redirect_to top_url if !logged_in?
     @kanban = Kanban.new
     @task = Task.new
-    @kanbans = current_user.kanbans.includes(:tasks)
+    @kanbans = current_user.kanbans.includes(:tasks) 
   end
 
   def create

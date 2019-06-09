@@ -4,10 +4,7 @@ Rails.application.routes.draw do
   post 'kanbans/create'
   post 'kanbans/update'
   post 'kanbans/destroy'
-  get '/tasks', to: 'tasks#index'
-  post 'tasks/create'
-  post 'tasks/update'
-  post 'tasks/destory'
+  resources :tasks, only: [:create, :update, :destroy]
   get '/signup', to: 'users#new'
   post '/signup', to: 'users#create'
   get '/login', to: 'sessions#new'
