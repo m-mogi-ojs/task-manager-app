@@ -10,30 +10,31 @@
             <div class="column">
               <div id="kanban-<%= kanbanIndex %>" class="card">
                 <div class="card-content">
-                  <header class="card-header">
+                  <header class="" style="border-bottom: 0.04rem solid #000000;">
                   <%= kanban.name %>
                   </header>
-                  <div>タスク名</div>
+                  <div style="padding-top: 1rem;">タスク名</div>
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
                     <p>
-                      <%= task.name %>
-                      <% if task.complete_flg %>
-                        <%= link_to task_path(task, task: { complete_flg: false }), remote: true, method: :patch do %>
-                          <i class="far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                      <div class="task">
+                        <%= task.name %>
+                        <% if task.complete_flg %>
+                          <%= link_to task_path(task, task: { complete_flg: false }), remote: true, method: :patch do %>
+                            <i class="far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                          <% end %>
+                        <% else %>
+                          <%= link_to task_path(task, task: { complete_flg: true }), remote: true, method: :patch do %>
+                            <i class="far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                          <% end %>
                         <% end %>
-                      <% else %>
-                        <%= link_to task_path(task, task: { complete_flg: true }), remote: true, method: :patch do %>
-                          <i class="far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                        <% end %>
-                      <% end %>
-                      <!--<a class="far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;" href="#"></a>
-                      <a class="far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;" href="#"></a>
-                      -->
-                      <%= %>
+                        <!--<a class="far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;" href="#"></a>
+                        <a class="far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;" href="#"></a>
+                        -->
+                      </div>
                     </p>
                   <% end %>
                   <br>
-                  <div class="card-footer ">
+                  <div class="">
                     <%= render 'tasks/form', kanban: kanban %>
                   </div>
                 </div>

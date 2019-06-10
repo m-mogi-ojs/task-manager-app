@@ -8,3 +8,16 @@
 .new_kanban {
   padding : 1.5rem;
 }
+
+.card {
+  border-radius: 0.25rem;
+}
+
+.task {
+  border-bottom: 0.04rem dashed #dddddd;
+  margin-left: 0.5rem;
+}
+
+.radius-right {
+  border-radius: 0rem 1rem 1rem 0rem !important;
+}
