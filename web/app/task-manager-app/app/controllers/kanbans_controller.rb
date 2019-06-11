@@ -18,6 +18,11 @@ class KanbansController < ApplicationController
   end
 
   def destroy
+    @kanban = Kanban.find(params[:id])
+    str = @kanban.name
+    @kanban.destroy
+    flash[:success] = "#{str}を削除しました。"
+    redirect_to root_url
   end
 
   private

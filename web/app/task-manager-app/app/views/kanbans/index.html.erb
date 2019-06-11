@@ -12,6 +12,9 @@
                 <div class="card-content">
                   <header class="" style="border-bottom: 0.04rem solid #000000;">
                   <%= kanban.name %>
+                  <%= link_to kanban_path(kanban), remote: true, method: :delete do %>
+                    <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                  <% end %>
                   </header>
                   <div style="padding-top: 1rem;">タスク名</div>
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>

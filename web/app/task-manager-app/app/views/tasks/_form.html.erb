@@ -4,8 +4,7 @@
     <div class="control">
       <%= f.text_field :name, class: "input", placeholder: "タスク名" %>
     </div>
-    <%= hidden_field_tag :id, kanban.id %>
+    <%= hidden_field_tag :kanban_id, kanban.id %>
     <%= f.submit "+", class: "button is-link radius-right" %>
   </div>
-
 <% end %>

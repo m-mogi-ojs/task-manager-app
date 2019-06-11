@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   def create
-    @task = Kanban.find(params[:id]).tasks.build(task_params)
+    @task = Kanban.find(params[:kanban_id]).tasks.build(task_params)
     flash[:success] = "タスクを作成しました" if @task.save
       
     redirect_to root_url

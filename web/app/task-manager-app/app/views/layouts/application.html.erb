@@ -4,7 +4,6 @@
     <title>task-manager-app</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet">
@@ -13,7 +12,7 @@
   <body>
     <nav class="navbar is-link" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
+        <a class="navbar-item" href="#">
 <!--          <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">-->
         </a>
 <!--    
@@ -65,12 +64,12 @@
                   ログアウト
                 </a>
               <% else %>
-              <a class="button is-primary">
-                <strong>ユーザーを作成する</strong>
-              </a>
-              <a class="button is-light">
-                ログイン
-              </a>
+                <a class="button is-primary">
+                  <strong>ユーザーを作成する</strong>
+                </a>
+                <a class="button is-light">
+                  ログイン
+                </a>
               <% end %>
             </div>
           </div>
@@ -114,15 +113,13 @@
     </nav>
 -->
     <% flash.each do |message_type, message| %>
-      <%= content_tag(:div, message, class: "alert alert-#{message_type}") %>
+      <%= content_tag(:span, message, class: "is-pulled-right alert alert-#{message_type}") %>
     <% end %>
     <%= yield %>
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
-          <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
-          is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+          Footer
         </p>
       </div>
     </footer>

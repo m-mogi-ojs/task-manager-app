@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
 
   root 'kanbans#index'
-  post 'kanbans/create'
-  post 'kanbans/update'
-  post 'kanbans/destroy'
+  resources :kanbans, only: [:create, :update, :destroy]
   resources :tasks, only: [:create, :update, :destroy]
   get '/signup', to: 'users#new'
   post '/signup', to: 'users#create'
