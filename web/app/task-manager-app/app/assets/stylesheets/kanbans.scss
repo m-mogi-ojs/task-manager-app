@@ -1,6 +1,17 @@
 // Place all the styles related to the kanbans controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+form {
+}
+
+.is-center {
+  text-align: center;
+  form {
+    display: flex;
+    justify-content: center;
+  }
+}
+
 .kanban-container {
   padding : 1.5rem;
 }
@@ -20,4 +31,9 @@
 
 .radius-right {
   border-radius: 0rem 1rem 1rem 0rem !important;
+}
+
+.container {
+  justify-content: center;
+  align-items: center;
 }

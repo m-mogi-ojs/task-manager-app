@@ -6,6 +6,7 @@
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset-context/cssreset-context-min.css">
     <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet">
   </head>
 
@@ -112,9 +113,6 @@
       </div>
     </nav>
 -->
-    <% flash.each do |message_type, message| %>
-      <%= content_tag(:span, message, class: "is-pulled-right alert alert-#{message_type}") %>
-    <% end %>
     <%= yield %>
     <footer class="footer">
       <div class="content has-text-centered">
