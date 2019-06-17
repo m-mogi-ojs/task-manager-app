@@ -15,6 +15,8 @@ jobs:
     steps:
       - checkout
 
+      working_directory: ~/repo/web/app/task-manager-app
+
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -25,7 +27,6 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            cd ~/repo/web/app/task-manager-app
             bundle install --jobs=4 --retry=3 --path vendor/bundle
 
       - save_cache:
