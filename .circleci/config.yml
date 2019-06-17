@@ -25,7 +25,7 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            cd ~/repo/task-manager-app/web/app/task-manager-app
+            cd ~/repo/web/app/task-manager-app
             bundle install --jobs=4 --retry=3 --path vendor/bundle
 
       - save_cache:
