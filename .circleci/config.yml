@@ -24,6 +24,12 @@ jobs:
           working_directory: ~/repo/task-manager-app/web/app/task-manager-app
 
       - run:
+          name: ls
+          command: |
+            ls -l
+          working_directory: ~/repo/task-manager-app/web/app/task-manager-app
+
+      - run:
           name: install dependencies
           command: |
             bundle install --jobs=4 --retry=3 --path vendor/bundle
