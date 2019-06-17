@@ -17,3 +17,5 @@ RUN mkdir /app
 COPY ./app /app
 WORKDIR /app/task-manager-app
 RUN bundle install
+
+CMD ["rails", "server", "-b", "0.0.0.0"]
