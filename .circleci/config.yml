@@ -10,22 +10,22 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
-    working_directory: ~/repo/web/app/task-manager-app
+    working_directory: ~/repo
 
     steps:
-      - checkout:
-        path: ~/repo
+      - checkout
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v1-dependencies-{{ checksum "./web/app/task-manager-app/Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
       - run:
           name: install dependencies
           command: |
+            cd ~/repo/web/app/task-manager-app
             bundle install --jobs=4 --retry=3 --path vendor/bundle
 
       - save_cache:
@@ -34,13 +34,18 @@ jobs:
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       # Database setup
-      - run: bundle exec rake db:create
-      - run: bundle exec rake db:schema:load
+      - run: 
+          name: DB setup
+          command: |
+            cd ~/repo/web/app/task-manager-app
+            bundle exec rake db:create
+            bundle exec rake db:schema:load
 
       # run tests!
       - run:
           name: run tests
           command: |
+            cd ~/repo/web/app/task-manager-app
             mkdir /tmp/test-results
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
               circleci tests split --split-by=timings)"
