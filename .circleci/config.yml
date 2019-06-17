@@ -10,7 +10,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
-    working_directory: /app/task-manager-app
+    working_directory: ~/repo
 
     steps:
       - checkout
@@ -26,6 +26,7 @@ jobs:
           name: install dependencies
           command: |
             bundle install --jobs=4 --retry=3 --path vendor/bundle
+          working_directory: ./task-manager-app/web/app/task-manager-app
 
       - save_cache:
           paths:
