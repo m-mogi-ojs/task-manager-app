@@ -65,12 +65,12 @@
                   ログアウト
                 </a>
               <% else %>
-                <a class="button is-primary">
-                  <strong>ユーザーを作成する</strong>
-                </a>
-                <a class="button is-light">
-                  ログイン
-                </a>
+                <div class="button is-primary">
+                  <%= link_to "ユーザーを作成する", signup_path, { class: "has-text-weight-bold has-text-white"} %>
+                </div>
+                <div class="button">
+                  <%= link_to "ログイン", login_path, { class: "has-text-black"} %>
+                </div>
               <% end %>
             </div>
           </div>
