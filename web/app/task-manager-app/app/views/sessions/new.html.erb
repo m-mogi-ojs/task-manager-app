@@ -1,36 +1,23 @@
-
-<section class="hero is-medium">
-  <div class="hero-body">
-    <div class="has-text-centered">
-      <%= form_for(:session, url: login_path) do |f| %>
-
-        <div class="field">
-          <%= f.label :email, class: "label" %>
-          <%= f.email_field :email, class: 'control' %>
-        </div>
-
-        <div class="field">
-          <%= f.label :password, class: "label"%>
-          <!-- link_to "(forgot password)", new_password_reset_path -->
-          <%= f.password_field :password, class: 'control' %>
-        </div>
-
-        <!--
-        <div class="field">
-          <%= f.label :remember_me, class: "checkbox inline" do %>
-            <%= f.check_box :remember_me %>
-            <span>Remember me on this computer</span>
-          <% end %>
-        </div>
-        -->
-
-        <div class="field">
-          <%= f.submit "ログイン", class: "button is-info" %>
-        </div>
-
-      <% end %>
-
-      <div><%= link_to "会員登録をする", signup_path %></div>
+<div class="container has-text-centered">
+  <%= form_for(:session, url: login_path) do |f| %>
+    <div class="field">
+      <%= f.label :email, class: "label" %>
+      <%= f.email_field :email, class: 'control' %>
+      <%= f.label :password, class: "label"%>
+      <!-- link_to "(forgot password)", new_password_reset_path -->
+      <%= f.password_field :password, class: 'control' %>
     </div>
+    <!--
+    <div class="field">
+      <%= f.label :remember_me, class: "checkbox inline" do %>
+        <%= f.check_box :remember_me %>
+        <span>Remember me on this computer</span>
+      <% end %>
+    </div>
+    -->
+      <%= f.submit "ログイン", class: "button is-primary" %>
+  <% end %>
+  <div>
+    <%= link_to "会員登録をする", signup_path %>
   </div>
-</section>
+</div>

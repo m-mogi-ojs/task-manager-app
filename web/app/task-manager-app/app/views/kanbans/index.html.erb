@@ -1,8 +1,7 @@
-<section class="hero is-info is-bold is-medium">
+<section class="hero is-info is-medium">
     <% flash.each do |message_type, message| %>
       <%= content_tag(:span, message, class: "is-pulled-right alert alert-#{message_type}") %>
     <% end %>
-  <div class="hero-body">
     <div class="container has-text-centered">
       <% if @kanbans.any? %>
         <div>
@@ -57,5 +56,4 @@
         </div>
       <% end %>
     </div>
-  </div>
 </section>
