@@ -1,59 +1,56 @@
-<section class="hero is-info is-medium">
-    <% flash.each do |message_type, message| %>
-      <%= content_tag(:span, message, class: "is-pulled-right alert alert-#{message_type}") %>
-    <% end %>
-    <div class="container has-text-centered">
-      <% if @kanbans.any? %>
-        <div>
-          <%= render 'form'%>
-        </div>
-        <div class="kanban-container">
-          <div class="columns is-multiline is-centered">
-            <% @kanbans.each_with_index do |kanban, kanbanIndex| %>
-              <div class="column is-one-third">
-                <div id="kanban-<%= kanbanIndex %>" class="card">
-                  <div class="card-content">
-                    <div class="" style="border-bottom: 0.04rem solid #000000;">
-                      <%= kanban.name %>
-                      <%= link_to kanban_path(kanban), remote: true, method: :delete do %>
-                        <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                      <% end %>
-                    </div>
-                    <div style="padding-top: 1rem;">タスク名</div>
-                    <% kanban.tasks.each_with_index do |task, taskIndex| %>
-                      <p>
-                        <div class="task">
-                          <%= task.name %>
-                          <% if task.complete_flg %>
-                            <%= link_to task_path(task, task: { complete_flg: false }), remote: true, method: :patch do %>
-                              <i class="far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                            <% end %>
-                          <% else %>
-                            <%= link_to task_path(task, task: { complete_flg: true }), remote: true, method: :patch do %>
-                              <i class="far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                            <% end %>
+<% flash.each do |message_type, message| %>
+  <%= content_tag(:div, message, class: "is-pulled-right alert alert-#{message_type}") %>
+<% end %>
+<div class="container has-text-centered">
+  <% if @kanbans.any? %>
+    <div>
+      <%= render 'form'%>
+    </div>
+    <div class="kanban-container">
+      <div class="columns is-mobile is-multiline is-centered">
+        <% @kanbans.each_with_index do |kanban, kanbanIndex| %>
+          <div class="column is-12-touch is-4-desktop">
+            <div id="kanban-<%= kanbanIndex %>" class="card">
+              <div class="card-content">
+                <div class="" style="border-bottom: 0.04rem solid #000000;">
+                  <%= kanban.name %>
+                  <%= link_to kanban_path(kanban), remote: true, method: :delete do %>
+                    <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                  <% end %>
+                </div>
+                <% if kanban.tasks.any? %>
+                  <div style="padding-top: 1rem;">タスク名</div>
+                  <% kanban.tasks.each_with_index do |task, taskIndex| %>
+                    <p>
+                      <div class="task">
+                        <%= task.name %>
+                        <% if task.complete_flg %>
+                          <%= link_to task_path(task, task: { complete_flg: false }), remote: true, method: :patch do %>
+                            <i class="far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
                           <% end %>
-                          <!--<a class="far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;" href="#"></a>
-                          <a class="far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;" href="#"></a>
-                          -->
-                        </div>
-                      </p>
-                    <% end %>
-                    <br>
-                    <div class="">
-                      <%= render 'tasks/form', kanban: kanban %>
-                    </div>
-                  </div>
+                        <% else %>
+                          <%= link_to task_path(task, task: { complete_flg: true }), remote: true, method: :patch do %>
+                            <i class="far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </p>
+                  <% end %>
+                <% end %>
+                <br>
+                <div class="">
+                  <%= render 'tasks/form', kanban: kanban %>
                 </div>
               </div>
-            <% end%>
+            </div>
           </div>
-        </div>
-      <% else %>
-        <div class="is-center">
-          まずはかんばんを追加しましょう
-          <%= render 'form'%>
-        </div>
-      <% end %>
+        <% end%>
+      </div>
     </div>
-</section>
+  <% else %>
+    <div class="is-center">
+      まずはかんばんを追加しましょう
+      <%= render 'form'%>
+    </div>
+  <% end %>
+</div>
