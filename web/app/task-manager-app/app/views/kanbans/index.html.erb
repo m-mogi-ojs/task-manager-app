@@ -22,8 +22,9 @@
                   <div style="padding-top: 1rem;">タスク名</div>
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
                     <p>
-                      <div class="task">
-                        <%= task.name %>
+                      <div>
+                        <span class="task"><%= task.name %></span>
+                        <input type="text" class="input task-edit" style="display: none"/>
                         <% if task.complete_flg %>
                           <%= link_to task_path(task, task: { complete_flg: false }), remote: true, method: :patch do %>
                             <i class="far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
