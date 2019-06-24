@@ -26,13 +26,9 @@
                         <span class="task"><%= task.name %></span>
                         <input type="text" id="<%= task.id %>" class="input task-edit" style="display: none"/>
                         <% if task.complete_flg %>
-                          <%= link_to task_path(task, task: { complete_flg: false }), remote: true, method: :patch do %>
-                            <i class="far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                          <% end %>
+                          <i id="<%= task.id %>" class="complete-flg far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
                         <% else %>
-                          <%= link_to task_path(task, task: { complete_flg: true }), remote: true, method: :patch do %>
-                            <i class="far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                          <% end %>
+                          <i id="<%= task.id %>" class="complete-flg far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
                         <% end %>
                       </div>
                     </p>
