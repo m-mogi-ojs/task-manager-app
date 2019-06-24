@@ -10,7 +10,7 @@ class TasksController < ApplicationController
     #持ち主チェックが必要
     @task = Task.find(params[:id])
     if @task.update_attributes(update_params)
-      redirect_to root_url
+      render json: {response: 'ok'}
     end
   end
 
@@ -24,6 +24,6 @@ class TasksController < ApplicationController
     end
 
     def update_params
-      params.require(:task).permit(:complete_flg)
+      params.require(:task).permit(:name, :complete_flg)
     end
 end

@@ -9,8 +9,23 @@ $(function(){
   $(".task-edit").blur(function() {
     var $taskEdit = $(this);
     // ajaxでデータ更新
-    $taskEdit.hide()
-    $taskEdit.parent().find('.task').text($taskEdit.val()).show();
+    $.ajax({
+      type: "PATCH",
+      url: "/tasks/" + $taskEdit.attr("id"),
+      timeout: 10000,
+      cache: false,
+      data: {'task': {'name': $taskEdit.val()}},
+      dataType: 'json'
+    }).done(function (response, textStatus, jqXHR) {
+      console.log("done: " + response);
+      $taskEdit.hide();
+      $taskEdit.parent().find('.task').text($taskEdit.val()).show();
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      alert("fail: Internal server error or not response");
+    }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+      console.log("always.");
+    });
   });
 
 });
