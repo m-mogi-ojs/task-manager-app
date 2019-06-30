@@ -3,10 +3,17 @@
     <div>
       <%= render 'form'%>
     </div>
+    <p>すべてのかんばんを絞り込む
+      <select name="search-box" class="is-pulled-right">
+        <option value="">全て</option>
+        <option value="1">チェック済み</option>
+        <option value="0">未チェック</option>
+      </select>
+    </p>
     <div class="kanban-container">
       <div class="columns is-mobile is-multiline is-centered">
         <% @kanbans.each_with_index do |kanban, kanbanIndex| %>
-          <div class="column is-12-touch is-4-desktop">
+          <div class="column is-12-touch is-6-desktop">
             <div id="kanban-<%= kanbanIndex %>" class="card">
               <div class="card-content">
                 <div class="" style="border-bottom: 0.04rem solid #000000;">
@@ -16,7 +23,20 @@
                   <% end %>
                 </div>
                 <% if kanban.tasks.any? %>
-                  <div style="padding-top: 1rem;">タスク名</div>
+                  <div style="padding-top: 1rem; padding-bottom: 2rem;">
+                    <div class="control has-icons-left is-pulled-right">
+                      <div class="select is-small">
+                        <select class="search-box" style="display: block;">
+                          <option value="">全て</option>
+                          <option value="1">チェック済み</option>
+                          <option value="0">未チェック</option>
+                        </select>
+                      </div>
+                      <span class="icon is-left">
+                        <i class="fas fa-search"></i>
+                      </span>
+                    </div>
+                  </div>
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
                     <p>
                       <div>

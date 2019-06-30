@@ -61,4 +61,13 @@ $(function(){
 
   });
 
+  $(".search-box").on('change', function(){
+    $select = $(this);
+    var completeFlg = $select.val();
+    console.log("completeFlg = " + completeFlg);
+
+    //絞り込みを行う
+
+  })
+
 });
