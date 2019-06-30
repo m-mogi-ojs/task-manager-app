@@ -1,6 +1,3 @@
-<% flash.each do |message_type, message| %>
-  <%= content_tag(:div, message, class: "is-pulled-right alert alert-#{message_type}") %>
-<% end %>
 <div class="container has-text-centered">
   <% if @kanbans.any? %>
     <div>

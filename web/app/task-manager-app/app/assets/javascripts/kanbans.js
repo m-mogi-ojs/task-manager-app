@@ -5,6 +5,7 @@ $(function(){
     $task.hide();
     $task.parent().find('.task-edit').val($task.text()).show().focus();
   });
+
   // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
   $(".task-edit").blur(function() {
     var $taskEdit = $(this);
@@ -28,6 +29,7 @@ $(function(){
     });
   });
 
+  // タスクチェックボックス処理
   $(".complete-flg").click(function() {
     console.log("clicked .complete-flg");
     $checkBox = $(this);

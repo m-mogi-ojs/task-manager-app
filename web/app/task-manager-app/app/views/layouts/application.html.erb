@@ -9,12 +9,11 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset-context/cssreset-context-min.css">
     <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet">
-
-
+    <meta name="viewport" content="width=device-width,initial-scale=1">
   </head>
 
   <body>
-    <div class="hero is-info is-fullheight">
+    <div class="hero is-info">
       <div class="hero-head">
         <nav class="navbar is-link" role="navigation" aria-label="main navigation">
           <div class="navbar-brand">
@@ -40,6 +39,9 @@
           </div>
         </nav>
       </div>
+      <% flash.each do |message_type, message| %>
+        <%= content_tag(:div, message, class: "is-pulled-right alert alert-#{message_type}") %>
+      <% end %>
       <div class="hero-body">
         <%= yield %>
       </div>
