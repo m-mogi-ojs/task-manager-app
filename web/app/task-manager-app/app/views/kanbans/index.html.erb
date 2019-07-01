@@ -3,13 +3,6 @@
     <div>
       <%= render 'form'%>
     </div>
-    <p>すべてのかんばんを絞り込む
-      <select name="search-box" class="is-pulled-right">
-        <option value="">全て</option>
-        <option value="1">チェック済み</option>
-        <option value="0">未チェック</option>
-      </select>
-    </p>
     <div class="kanban-container">
       <div class="columns is-mobile is-multiline is-centered">
         <% @kanbans.each_with_index do |kanban, kanbanIndex| %>
