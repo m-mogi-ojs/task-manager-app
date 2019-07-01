@@ -38,17 +38,11 @@
                     </div>
                   </div>
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
-                    <p>
-                      <div class="task-row">
-                        <span class="task"><%= task.name %></span>
-                        <input type="text" id="<%= task.id %>" class="input task-edit" style="display: none"/>
-                        <% if task.complete_flg %>
-                          <i id="<%= task.id %>" class="complete-flg far fa-check-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                        <% else %>
-                          <i id="<%= task.id %>" class="complete-flg far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                        <% end %>
-                      </div>
-                    </p>
+                    <div class="task-row">
+                      <span class="task"><%= task.name %></span>
+                      <input type="text" id="<%= task.id %>" class="input is-small task-edit" style="display: none"/>
+                      <i id="<%= task.id %>" class="complete-flg far fa<% if task.complete_flg %>-check<%end%>-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                    </div>
                   <% end %>
                 <% end %>
                 <br>

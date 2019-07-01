@@ -1,9 +1,10 @@
 $(function(){
   // タスク名クリック時にテキストボックスを表示
-  $(".task").click(function() {
+  $(".task").on('click', function() {
     var $task = $(this);
     $task.hide();
     $task.parent().find('.task-edit').val($task.text()).show().focus();
+    $task.parent().find(".complete-flg").hide();
   });
 
   // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
@@ -21,6 +22,7 @@ $(function(){
       console.log("done: " + response);
       $taskEdit.hide();
       $taskEdit.parent().find('.task').text($taskEdit.val()).show();
+      $taskEdit.parent().find('.complete-flg').show();
     }).fail(function (jqXHR, textStatus, errorThrown) {
       console.log(jqXHR);
       alert("fail: Internal server error or not response");
