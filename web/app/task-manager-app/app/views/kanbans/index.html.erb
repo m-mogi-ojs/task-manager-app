@@ -39,7 +39,7 @@
                   </div>
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
                     <p>
-                      <div>
+                      <div class="task-row">
                         <span class="task"><%= task.name %></span>
                         <input type="text" id="<%= task.id %>" class="input task-edit" style="display: none"/>
                         <% if task.complete_flg %>

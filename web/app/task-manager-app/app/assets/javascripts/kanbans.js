@@ -31,21 +31,17 @@ $(function(){
 
   // タスクチェックボックス処理
   $(".complete-flg").click(function() {
-    console.log("clicked .complete-flg");
     $checkBox = $(this);
-    classes = $checkBox.attr("class").split(" ");
-    var hasCheck = classes.includes("fa-check-square") ? 1 : 0;
+    var hasChk = hasCheck($checkBox);
     $.ajax({
       type: "PATCH",
       url: "/tasks/" + $checkBox.attr("id"),
       timeout: 10000,
       cache: false,
-      data: {'task': {'complete_flg': hasCheck === 1 ? 0 : 1}},
+      data: {'task': {'complete_flg': hasChk === 1 ? 0 : 1}},
       dataType: 'json'
     }).done(function (response, textStatus, jqXHR) {
-      console.log("done: " + response);
-      console.log(hasCheck)
-      if (hasCheck) {
+      if (hasChk) {
         $checkBox.removeClass("fa-check-square");
         $checkBox.addClass("fa-square");
       } else {
@@ -56,18 +52,25 @@ $(function(){
       console.log(jqXHR);
       alert("fail: Internal server error or not response");
     }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-      console.log("always.");
     });
 
   });
 
+  // セレクトボックスの絞り込み
   $(".search-box").on('change', function(){
     $select = $(this);
     var completeFlg = $select.val();
-    console.log("completeFlg = " + completeFlg);
-
-    //絞り込みを行う
-
+    $select.parent().parent().parent().parent().find(".task-row").each(function(i, e) {
+      var $obj = $(e);
+      if (completeFlg === "" || completeFlg == hasCheck($obj.find(".complete-flg"))) {
+        $obj.show();
+      } else {
+        $obj.hide();
+      }
+    });
   })
-
 });
+
+var hasCheck = function($obj) {
+  return $obj.attr("class").split(" ").includes("fa-check-square") ? 1 : 0;
+}
