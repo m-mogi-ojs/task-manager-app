@@ -11,12 +11,15 @@ $(function(){
   $(".task-edit").blur(function() {
     var $taskEdit = $(this);
     $taskEdit.hide();
-    $taskEdit.parent().find('.task').text($taskEdit.val()).show();
-    $taskEdit.parent().find('.complete-flg').show();
+    var $taskRow = $taskEdit.parent();
+    var $task = $taskRow.find('.task');
+    var $completeFlg = $taskRow.find('.complete-flg');
+    $task.text($taskEdit.val()).show();
+    $completeFlg.show();
     // ajaxでデータ更新
     $.ajax({
       type: "PATCH",
-      url: "/tasks/" + $taskEdit.attr("id"),
+      url: "/tasks/" + $taskRow.find('input[name="task-id"]').val(),
       timeout: 10000,
       cache: false,
       data: {'task': {'name': $taskEdit.val()}},
@@ -25,10 +28,9 @@ $(function(){
     }).fail(function (jqXHR, textStatus, errorThrown) {
       console.log(jqXHR);
       alert("fail: Internal server error or not response");
-      var $task = $taskEdit.parent().find(".task");
       $task.hide();
-      $task.parent().find('.task').text($task.val()).show();
-      $task.parent().find('.complete-flg').show();
+      $task.text($task.val()).show();
+      $completeFlg.show();
     }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
     });
   });
@@ -46,7 +48,7 @@ $(function(){
     }
     $.ajax({
       type: "PATCH",
-      url: "/tasks/" + $checkBox.attr("id"),
+      url: "/tasks/" + $checkBox.parent().find('input[name="task-id"]').val(),
       timeout: 10000,
       cache: false,
       data: {'task': {'complete_flg': hasChk === 1 ? 0 : 1}},

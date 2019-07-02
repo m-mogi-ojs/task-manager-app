@@ -33,8 +33,9 @@
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
                     <div class="task-row">
                       <span class="task"><%= task.name %></span>
-                      <input type="text" id="<%= task.id %>" class="input is-small task-edit" style="display: none"/>
-                      <i id="<%= task.id %>" class="complete-flg far fa<% if task.complete_flg %>-check<%end%>-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                      <input type="text" class="input is-small task-edit" style="display: none"/>
+                      <i class="complete-flg far fa<% if task.complete_flg %>-check<%end%>-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                      <input type="hidden" name="task-id" value="<%=task.id%>">
                     </div>
                   <% end %>
                 <% end %>
