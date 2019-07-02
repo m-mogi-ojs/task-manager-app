@@ -10,6 +10,9 @@ $(function(){
   // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
   $(".task-edit").blur(function() {
     var $taskEdit = $(this);
+    $taskEdit.hide();
+    $taskEdit.parent().find('.task').text($taskEdit.val()).show();
+    $taskEdit.parent().find('.complete-flg').show();
     // ajaxでデータ更新
     $.ajax({
       type: "PATCH",
@@ -19,15 +22,14 @@ $(function(){
       data: {'task': {'name': $taskEdit.val()}},
       dataType: 'json'
     }).done(function (response, textStatus, jqXHR) {
-      console.log("done: " + response);
-      $taskEdit.hide();
-      $taskEdit.parent().find('.task').text($taskEdit.val()).show();
-      $taskEdit.parent().find('.complete-flg').show();
     }).fail(function (jqXHR, textStatus, errorThrown) {
       console.log(jqXHR);
       alert("fail: Internal server error or not response");
+      var $task = $taskEdit.parent().find(".task");
+      $task.hide();
+      $task.parent().find('.task').text($task.val()).show();
+      $task.parent().find('.complete-flg').show();
     }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-      console.log("always.");
     });
   });
 
@@ -35,6 +37,13 @@ $(function(){
   $(".complete-flg").click(function() {
     $checkBox = $(this);
     var hasChk = hasCheck($checkBox);
+    if (hasChk) {
+      $checkBox.removeClass("fa-check-square");
+      $checkBox.addClass("fa-square");
+    } else {
+      $checkBox.removeClass("fa-square");
+      $checkBox.addClass("fa-check-square");
+    }
     $.ajax({
       type: "PATCH",
       url: "/tasks/" + $checkBox.attr("id"),
@@ -43,19 +52,18 @@ $(function(){
       data: {'task': {'complete_flg': hasChk === 1 ? 0 : 1}},
       dataType: 'json'
     }).done(function (response, textStatus, jqXHR) {
-      if (hasChk) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      alert("fail: Internal server error or not response");
+      if (!hasChk) {
         $checkBox.removeClass("fa-check-square");
         $checkBox.addClass("fa-square");
       } else {
         $checkBox.removeClass("fa-square");
         $checkBox.addClass("fa-check-square");
       }
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-      alert("fail: Internal server error or not response");
     }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
     });
-
   });
 
   // セレクトボックスの絞り込み
