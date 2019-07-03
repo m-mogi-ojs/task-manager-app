@@ -9,8 +9,10 @@ class TasksController < ApplicationController
   def update
     #持ち主チェックが必要
     @task = Task.find(params[:id])
-    if @task.update_attributes(update_params)
-      render json: {response: 'ok'}
+    if @task.kanban.user_id == current_user.id
+      if @task.update_attributes(update_params)
+        render json: {response: 'ok'}
+      end
     end
   end
 
