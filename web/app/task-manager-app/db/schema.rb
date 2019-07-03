@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_145444) do
     t.string "name", null: false
     t.date "deadline"
     t.boolean "complete_flg", default: false
+    t.integer "sort"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["kanban_id"], name: "index_tasks_on_kanban_id"
