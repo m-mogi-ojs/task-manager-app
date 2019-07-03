@@ -15,6 +15,12 @@ class KanbansController < ApplicationController
   end
 
   def update
+    @kanban = Kanban.find(params[:id])
+    if @kanban.user_id == current_user.id
+      if @kanban.update_attributes(kanban_params)
+        render json: {response: 'ok'}
+      end
+    end
   end
 
   def destroy

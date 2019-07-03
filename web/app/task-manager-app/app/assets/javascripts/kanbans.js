@@ -35,6 +35,42 @@ $(function(){
     });
   });
 
+  // かんばん名クリック時にテキストボックスを表示
+  $(".kanban").on('click', function() {
+    var $kanban = $(this);
+    $kanban.hide();
+    $kanban.parent().find('.kanban-edit').val($kanban.text()).show().focus();
+    $kanban.parent().find(".complete-flg").hide();
+  });
+
+  // かんばん名テキストボックスからフォーカスを外した際にタスク名に反映
+  $(".kanban-edit").blur(function() {
+    var $kanbanEdit = $(this);
+    $kanbanEdit.hide();
+    var $kanbanRow = $kanbanEdit.parent();
+    var $kanban = $kanbanRow.find('.kanban');
+    var $completeFlg = $kanbanRow.find('.complete-flg');
+    $kanban.text($kanbanEdit.val()).show();
+    $completeFlg.show();
+    // ajaxでデータ更新
+    $.ajax({
+      type: "PATCH",
+      url: "/kanbans/" + $kanbanRow.find('input[name="kanban-id"]').val(),
+      timeout: 10000,
+      cache: false,
+      data: {'kanban': {'name': $kanbanEdit.val()}},
+      dataType: 'json'
+    }).done(function (response, textStatus, jqXHR) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      alert("fail: Internal server error or not response");
+      $kanban.hide();
+      $kanban.text($kanban.val()).show();
+      $completeFlg.show();
+    }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+    });
+  });
+
   // タスクチェックボックス処理
   $(".complete-flg").click(function() {
     $checkBox = $(this);
