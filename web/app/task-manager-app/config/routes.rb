@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#create'
   get '/logout', to: 'sessions#destroy'
   get '/top', to: 'top#index'
+  patch '/tasks/update/sort', to: 'tasks#update_sort'
 end

@@ -33,7 +33,7 @@
                     </div>
                   </div>
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
-                    <div class="task-row">
+                    <div class="task-row" draggable="true" data-sort="<%=task.sort%>" data-task-id="<%=task.id%>">
                       <span class="task"><%= task.name %></span>
                       <input type="text" class="input is-small task-edit" style="display: none"/>
                       <i class="complete-flg far fa<% if task.complete_flg %>-check<%end%>-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>

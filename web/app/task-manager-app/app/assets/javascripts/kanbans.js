@@ -116,9 +116,68 @@ $(function(){
         $obj.hide();
       }
     });
-  })
+  });
+
+  // タスクのドロップイベント
+  setDragEvent($(".task-row"));
+
+  var $draggingObj = null;
+
+  $(".task-row").on('dragstart', function(e){
+    $draggingObj = $(this)
+  });
+
+  $(".task-row").on('drop', function(e){
+    var $taskRow = $draggingObj;
+    var $targetTaskRow = $(this);
+    if ($targetTaskRow.attr("class") === "task") {
+      $targetTaskRow = $targetTaskRow.parent();
+    }
+    // taskrowが取得できた場合
+    if ($targetTaskRow !== null) {
+      // taskRowにtargetTaskRowのsortを設定する
+      // その際、taskRow.sortからtargetTaskRow.sortの値を順番通りになるように変更する
+      $.ajax({
+        type: "PATCH",
+        url: "/tasks/update/sort",
+        timeout: 10000,
+        cache: false,
+        data: {'task': {
+          'id': $taskRow.attr('data-task-id'),
+          'target_id': $targetTaskRow.attr('data-task-id')
+        }},
+        dataType: 'json'
+      }).done(function (response, textStatus, jqXHR) {
+        console.log("/tasks/update/sort done.")
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+        alert("fail: Internal server error or not response");
+      }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+      });
+    }
+  });
+
 });
 
 var hasCheck = function($obj) {
   return $obj.attr("class").split(" ").includes("fa-check-square") ? 1 : 0;
+}
+
+var setDragEvent = function($obj){
+  $obj.on('drop', function(e){
+    e.preventDefault();
+    e.stopPropagation()
+    console.log("drop");
+    console.log($(e.target.parentNodes).find('span').text());
+    console.log($(this).html);
+    console.log(e.target.className)
+  });
+  $obj.on('dragover', function(e){
+    e.preventDefault();
+    e.stopPropagation()
+  });
+  $obj.on('dragleave', function(e){
+    e.preventDefault();
+    e.stopPropagation()
+  });
 }
