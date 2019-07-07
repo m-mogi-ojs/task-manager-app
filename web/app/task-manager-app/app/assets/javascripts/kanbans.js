@@ -124,15 +124,39 @@ $(function(){
   var $draggingObj = null;
 
   $(".task-row").on('dragstart', function(e){
+    if ($(this).hasClass("task-row-dummy")){
+      $draggingObj = null;
+      return
+    }
     $draggingObj = $(this)
   });
 
   $(".task-row").on('drop', function(e){
     var $taskRow = $draggingObj;
     var $targetTaskRow = $(this);
+    var isDummy = false;
+    var isDiffKanban = false
+    // 同じtaskRowにdropされたら処理を中断
+    if ($taskRow.is($targetTaskRow) || $draggingObj == null){
+      return
+    }
+
+    // タスク名にdropした場合task.parentでtask-rowに変更
     if ($targetTaskRow.attr("class") === "task") {
       $targetTaskRow = $targetTaskRow.parent();
     }
+    // dummyにdropした場合はisDummyフラグを立てる
+    if ($targetTaskRow.hasClass("task-row-dummy")) {
+      isDummy = true;
+    }
+    // 異なるかんばんにdoopした場合はisDiffKanbanフラグを立てる
+    if ($taskRow.parent().find(".kanban-row").attr("data-kanban-id") !== $targetTaskRow.parent().find(".kanban-row").attr("data-kanban-id")) {
+      isDiffKanban = true;
+    }
+    console.log("isDummy:"+isDummy)
+    console.log("isDiffKanban:"+isDiffKanban)
+
+
     // taskrowが取得できた場合
     if ($targetTaskRow !== null) {
       // taskRowにtargetTaskRowのsortを設定する
@@ -144,7 +168,8 @@ $(function(){
         cache: false,
         data: {'task': {
           'id': $taskRow.attr('data-task-id'),
-          'target_id': $targetTaskRow.attr('data-task-id')
+          'target_id': isDummy ? null : $targetTaskRow.attr('data-task-id'),
+          'target_kanban_id': isDummy && isDiffKanban ? $targetTaskRow.parent().find(".kanban-row").attr("data-kanban-id") : null
         }},
         dataType: 'json'
       }).done(function (response, textStatus, jqXHR) {
@@ -167,10 +192,6 @@ var setDragEvent = function($obj){
   $obj.on('drop', function(e){
     e.preventDefault();
     e.stopPropagation()
-    console.log("drop");
-    console.log($(e.target.parentNodes).find('span').text());
-    console.log($(this).html);
-    console.log(e.target.className)
   });
   $obj.on('dragover', function(e){
     e.preventDefault();
