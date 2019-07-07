@@ -35,3 +35,7 @@
   justify-content: center;
   align-items: center;
 }
+
+*[draggable=true] {
+  cursor: pointer;
+}

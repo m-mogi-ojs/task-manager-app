@@ -5,6 +5,7 @@ $(function(){
     $task.hide();
     $task.parent().find('.task-edit').val($task.text()).show().focus();
     $task.parent().find(".complete-flg").hide();
+    $task.parent().find(".fa-arrows-alt-v").hide();
   });
 
   // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
@@ -14,8 +15,10 @@ $(function(){
     var $taskRow = $taskEdit.parent();
     var $task = $taskRow.find('.task');
     var $completeFlg = $taskRow.find('.complete-flg');
+    var $arrow = $taskRow.find(".fa-arrows-alt-v");
     $task.text($taskEdit.val()).show();
     $completeFlg.show();
+    $arrow.show();
     // ajaxでデータ更新
     $.ajax({
       type: "PATCH",
@@ -138,6 +141,7 @@ $(function(){
     var isDiffKanban = false
     // 同じtaskRowにdropされたら処理を中断
     if ($taskRow.is($targetTaskRow) || $draggingObj == null){
+      $(this).css('padding-top', '0rem');
       return
     }
 
@@ -180,7 +184,18 @@ $(function(){
       }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
       });
     }
+    $(this).css('padding-top', '0rem');
   });
+
+  // dragenter, dragleave
+  $(".task-row").on('dragenter', function(e){
+    $(this).css('padding-top', '1.5rem');
+    console.log("dragenter");
+  })
+  $(".task-row").on('dragleave', function(e){
+    $(this).css('padding-top', '0rem');
+    console.log("dragleave");
+  })
 
 });
 
@@ -194,6 +209,10 @@ var setDragEvent = function($obj){
     e.stopPropagation()
   });
   $obj.on('dragover', function(e){
+    e.preventDefault();
+    e.stopPropagation()
+  });
+  $obj.on('dragenter', function(e){
     e.preventDefault();
     e.stopPropagation()
   });
