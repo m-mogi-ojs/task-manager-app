@@ -22,9 +22,12 @@
   border-radius: 0.25rem;
 }
 
-.task {
+.dot-border-bottom {
   border-bottom: 0.04rem dashed #dddddd;
-  margin-left: 0.5rem;
+}
+
+.task-row {
+  padding-top: 0.5rem;
 }
 
 .radius-right {

@@ -18,28 +18,23 @@
                   <input type="hidden" name="kanban-id" value="<%=kanban.id%>">
                 </div>
                 <% if kanban.tasks.any? %>
-                  <div style="padding-top: 1rem; padding-bottom: 2rem;">
-                    <div class="control has-icons-left is-pulled-right">
+                  <div style="height: 2rem; text-align: right;">
+                    <i class="fas fa-th is-pulled-left" style="display: inline-block; margin-top: 0.25rem; margin-left: 0.25rem; margin-right: 1rem;"></i>
+                    <div class="control has-icons-left" style="display: inline;">
                       <div class="select is-small">
-                        <select class="search-box" style="display: block;">
+                        <select class="search-box is-pulled-right" style="">
                           <option value="">全て</option>
                           <option value="1">チェック済み</option>
                           <option value="0">未チェック</option>
                         </select>
+                        <span class="icon is-left">
+                          <i class="fas fa-search"></i>
+                        </span>
                       </div>
-                      <span class="icon is-left">
-                        <i class="fas fa-search"></i>
-                      </span>
                     </div>
                   </div>
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
-                    <div class="task-row" draggable="true" data-sort="<%=task.sort%>" data-task-id="<%=task.id%>">
-                      <!-- touchなら上下操作用のiconを出す -->
-                      <!--
-                      <i class="fas fa-arrow-circle-down is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                      <i class="fas fa-arrow-circle-up is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                      -->
-                      <!-- それ以外なら上下操作可能iconを出す -->
+                    <div class="task-row dot-border-bottom" draggable="true" data-sort="<%=task.sort%>" data-task-id="<%=task.id%>">
                       <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
                       <span class="task"><%= task.name %></span>
                       <input type="text" class="input is-small task-edit" style="display: none"/>

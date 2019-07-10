@@ -5,7 +5,7 @@ $(function(){
     $task.hide();
     $task.parent().find('.task-edit').val($task.text()).show().focus();
     $task.parent().find(".complete-flg").hide();
-    $task.parent().find(".fa-arrows-alt-v").hide();
+    $task.parent().find("i").hide();
   });
 
   // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
@@ -15,10 +15,10 @@ $(function(){
     var $taskRow = $taskEdit.parent();
     var $task = $taskRow.find('.task');
     var $completeFlg = $taskRow.find('.complete-flg');
-    var $arrow = $taskRow.find(".fa-arrows-alt-v");
+    var $images = $taskRow.find("i");
     $task.text($taskEdit.val()).show();
     $completeFlg.show();
-    $arrow.show();
+    $images.show();
     // ajaxでデータ更新
     $.ajax({
       type: "PATCH",
@@ -122,7 +122,7 @@ $(function(){
   });
 
   // タスクのドロップイベント
-  setDragEvent($(".task-row"));
+  initDragEvent($(".task-row"));
 
   var $draggingObj = null;
 
@@ -190,12 +190,20 @@ $(function(){
   // dragenter, dragleave
   $(".task-row").on('dragenter', function(e){
     $(this).css('padding-top', '1.5rem');
-    console.log("dragenter");
   })
   $(".task-row").on('dragleave', function(e){
     $(this).css('padding-top', '0rem');
-    console.log("dragleave");
   })
+
+  // モバイル時にタスク入れ替えボタンを表示する
+  $(".fa-arrows-alt-v").each(function() {
+    if (navigator.userAgent.match(/(iPhone|iPad|iPod|Android)/i)) {
+      $(this).parent().append('<i class="fas fa-caret-square-down is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>');
+      $(this).parent().append('<i class="fas fa-caret-square-up is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>');
+      $(this).remove();
+      // TODO:ボタンのイベントを登録する
+    }
+  });
 
 });
 
@@ -203,7 +211,7 @@ var hasCheck = function($obj) {
   return $obj.attr("class").split(" ").includes("fa-check-square") ? 1 : 0;
 }
 
-var setDragEvent = function($obj){
+var initDragEvent = function($obj){
   $obj.on('drop', function(e){
     e.preventDefault();
     e.stopPropagation()
