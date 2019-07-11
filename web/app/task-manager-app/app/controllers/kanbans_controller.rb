@@ -4,7 +4,7 @@ class KanbansController < ApplicationController
   def index
     @kanban = Kanban.new
     @task = Task.new
-    @kanbans = current_user.kanbans.includes(:tasks).order('tasks.sort')
+    @kanbans = current_user.kanbans.includes(:tasks).order('kanbans.id').order('tasks.sort')
   end
 
   def create

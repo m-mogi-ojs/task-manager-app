@@ -94,18 +94,20 @@ class TasksController < ApplicationController
         # 更新対象を取得
         maxSort = [from_task.first.sort, to_task.first.sort].max
         minSort = [from_task.first.sort, to_task.first.sort].min
+        isMaxFrom = (maxSort == from_task.first.sort)
+        sort = isMaxFrom ? 'sort desc' : :sort 
         tasks = Task
                   .where(kanban_id: from_task.first.kanban_id)
                   .where(sort: minSort..maxSort)
-                  .order(:sort)
+                  .order(sort)
         # sort入れ替え処理
         # min -> max -1
         # max -1 < -> -1
         tasks.each_with_index do |e, i|
           if i == 0
-            e.sort = maxSort - 1
-          elsif i != tasks.length - 1
-            e.sort -= 1
+            e.sort = isMaxFrom ? minSort : maxSort
+          else
+            e.sort = e.sort + (isMaxFrom ? 1 : -1)
           end
           e.save!
         end

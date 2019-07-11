@@ -2,6 +2,8 @@
   <% if @kanbans.any? %>
     <div>
       <%= render 'form'%>
+      <!--カラムを縦並び、2xn、3xnに変更できるようにしたい-->
+      <i class="fas fa-th is-pulled-left" style="font-size: 1.25rem; margin-top: 0.75rem; margin-left: 0.25rem; margin-right: 1rem;"></i>
     </div>
     <div class="kanban-container">
       <div class="columns is-mobile is-multiline is-centered">
@@ -19,7 +21,6 @@
                 </div>
                 <% if kanban.tasks.any? %>
                   <div style="height: 2rem; text-align: right;">
-                    <i class="fas fa-th is-pulled-left" style="display: inline-block; margin-top: 0.25rem; margin-left: 0.25rem; margin-right: 1rem;"></i>
                     <div class="control has-icons-left" style="display: inline;">
                       <div class="select is-small">
                         <select class="search-box is-pulled-right" style="">
