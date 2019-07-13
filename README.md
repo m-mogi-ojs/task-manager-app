@@ -8,6 +8,6 @@ rails db:create
 rails db:migrate
 
 # heroku deploy
-cd ./web
-heroku container:push web
-heroku container:relase web
+cd ./web  
+heroku container:push web  
+heroku container:relase web  
