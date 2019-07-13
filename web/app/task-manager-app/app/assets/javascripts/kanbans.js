@@ -177,6 +177,8 @@ $(function(){
         }},
         dataType: 'json'
       }).done(function (response, textStatus, jqXHR) {
+        $taskRow.clone(true).insertBefore($targetTaskRow);
+        $taskRow.remove();
         console.log("/tasks/update/sort done.")
       }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log(jqXHR);
@@ -184,7 +186,7 @@ $(function(){
       }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
       });
     }
-    $(this).css('padding-top', '0rem');
+    $(this).css('padding-top', '0.5rem');
   });
 
   // dragenter, dragleave
@@ -192,7 +194,7 @@ $(function(){
     $(this).css('padding-top', '1.5rem');
   })
   $(".task-row").on('dragleave', function(e){
-    $(this).css('padding-top', '0rem');
+    $(this).css('padding-top', '0.5rem');
   })
 
   // モバイル時にタスク入れ替えボタンを表示する
