@@ -10,7 +10,7 @@
         <% @kanbans.each_with_index do |kanban, kanbanIndex| %>
           <div class="column is-12-touch is-6-desktop">
             <div class="card">
-              <div class="card-content">
+              <div class="card-content" data-kanban-id="<%=kanban.id%>">
                 <div class="kanban-row" style="border-bottom: 0.04rem solid #000000;" data-kanban-id="<%=kanban.id%>">
                   <span class="kanban"><%= kanban.name %></span>
                   <input type="text" class="input is-small kanban-edit" style="display: none"/>
@@ -19,7 +19,6 @@
                   <% end %>
                   <input type="hidden" name="kanban-id" value="<%=kanban.id%>">
                 </div>
-                <% if kanban.tasks.any? %>
                   <div style="height: 2rem; text-align: right;">
                     <div class="control has-icons-left" style="display: inline;">
                       <div class="select is-small">
@@ -34,6 +33,7 @@
                       </div>
                     </div>
                   </div>
+                <% if kanban.tasks.any? %>
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
                     <div class="task-row dot-border-bottom" draggable="true" data-sort="<%=task.sort%>" data-task-id="<%=task.id%>">
                       <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
@@ -44,9 +44,10 @@
                     </div>
                   <% end %>
                 <% end %>
-                <div class="task-row-dummy task-row" style="padding: 0.5rem;"> </div>
-                <div class="">
-                  <%= render 'tasks/form', kanban: kanban %>
+                <div class="task-row-dummy task-row" style="padding: 0.25rem;"></div>
+                <div class="task-add dot-border-bottom">
+                  <span style="color: silver;">タスクを追加する</span>
+                  <input type="text" class="input is-small task-add-input" style="display: none"/>
                 </div>
               </div>
             </div>

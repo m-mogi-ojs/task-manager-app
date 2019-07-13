@@ -11,6 +11,7 @@ class UsersController < ApplicationController
       log_in @user
       redirect_to root_url
     else
+      flash[:warning] = @user.errors.full_messages.join("<br>").html_safe
       render 'new'
     end
   end

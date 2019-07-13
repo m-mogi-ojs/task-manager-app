@@ -38,6 +38,60 @@ $(function(){
     });
   });
 
+  // タスクを追加するクリック時にテキストボックスを表示
+  $(".task-add").on('click', function() {
+    var $taskAdd = $(this);
+    $taskAdd.find("span").hide();
+    $taskAdd.find("input").show().focus();
+  });
+
+  // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
+  $(".task-add-input").blur(function() {
+    var $taskAddInput = $(this);
+    var $taskAdd = $taskAddInput.parent();
+    var $cardContent = $taskAdd.parent();
+    //inputを非表示に
+    $taskAddInput.hide();
+    //spanを表示に
+    $taskAdd.find("span").show();
+    //空だったらコールしない
+    if ($taskAddInput.val() == "") {
+      return
+    }
+    // ajaxでデータ更新
+    $.ajax({
+      type: "POST",
+      url: "/tasks",
+      timeout: 10000,
+      cache: false,
+      data: {'task': {
+        'name': $taskAddInput.val(),
+      },
+      'kanban_id': $cardContent.attr("data-kanban-id")
+    },
+      dataType: 'json'
+    }).done(function (response, textStatus, jqXHR) {
+      //追加タスクをかんばんに追加
+      $cardContent.find(".task-row-dummy").before(
+        `
+                    <div class="task-row dot-border-bottom" draggable="true" data-sort="`+response.sort+`" data-task-id="`+response.task_id+`">
+                      <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                      <span class="task">`+$taskAddInput.val()+`</span>
+                      <input type="text" class="input is-small task-edit" style="display: none"/>
+                      <i class="complete-flg far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                      <input type="hidden" name="task-id" value="`+response.task_id+`<%=task.id%>">
+                    </div>
+        `
+      );
+      //inputの内容をリセット
+      $taskAddInput.val("");
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      alert("fail: Internal server error or not response");
+    }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+    });
+  });
+
   // かんばん名クリック時にテキストボックスを表示
   $(".kanban").on('click', function() {
     var $kanban = $(this);

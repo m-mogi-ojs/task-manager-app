@@ -3,9 +3,11 @@ class TasksController < ApplicationController
     kanban = Kanban.find(params[:kanban_id])
     @task = kanban.tasks.build(task_params)
     @task.sort = kanban.tasks.length
-    flash[:success] = "タスクを作成しました" if @task.save
-      
-    redirect_to root_url
+    if @task.save
+      render json: {response: 'ok', task_id: @task.id, sort: @task.sort}
+    else
+      render status: 400, json: {response: 'ng'}
+    end
   end
 
   def update
