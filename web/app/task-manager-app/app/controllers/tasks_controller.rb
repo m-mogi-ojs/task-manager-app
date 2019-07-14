@@ -33,6 +33,43 @@ class TasksController < ApplicationController
               .load()
     if !to_task.empty? && from_task.first.kanban_id != to_task.first.kanban_id
       #別のかんばんの間へ移動したい場合
+      moveTaskToOtherKanban(from_task, to_task)
+    elsif to_task.empty? && params[:task][:target_kanban_id].present?
+      #かんばんの最後へ移動
+      moveTaskToOtherKanbanLatest(from_task, to_task)
+    else
+      #かんばんの移動なし
+      moveTaskToSameKanban(from_task, to_task)
+    end
+      
+    render json: { response: 'ok'}
+
+  end
+
+  def destroy
+    @task = Task.includes(:kanban).find(params[:id])
+    if @task.kanban.user_id == current_user.id
+      @task.destroy
+      #sort順変更
+    end
+    redirect_to root_url
+  end
+
+  private
+
+    def task_params
+      params.require(:task).permit(:name, :deadline)
+    end
+
+    def update_params
+      params.require(:task).permit(:name, :complete_flg)
+    end
+
+    def update_sort_params
+      params.require(:task).permit(:id, :target_id, :target_kanban_id)
+    end
+
+    def moveTaskToOtherKanban(from_task, to_task)
       tasks = Task
                 .where(kanban_id: from_task.first.kanban_id)
                 .where('sort >= ?', from_task.first.sort)
@@ -56,8 +93,9 @@ class TasksController < ApplicationController
         end
         e.save!
       end
-    elsif to_task.empty? && params[:task][:target_kanban_id].present?
-      #かんばんの最後へ移動
+    end
+    
+    def moveTaskToOtherKanbanLatest(from_task, to_task)
       #かんばんの所有者チェック
       kanban = Kanban.find_by(id: params[:task][:target_kanban_id], user_id: current_user.id)
       return render status: 400, json: {response: 'ng'} if kanban.blank?
@@ -76,8 +114,9 @@ class TasksController < ApplicationController
         end
         e.save!
       end
-    else
-      #かんばんの移動なし
+    end
+
+    def moveTaskToSameKanban(from_task, to_task)
       if params[:task][:target_id].empty?
         tasks = Task
                           .where(kanban_id: from_task.first.kanban_id)
@@ -114,26 +153,5 @@ class TasksController < ApplicationController
           e.save!
         end
       end
-    end
-      
-    render json: { response: 'ok'}
-
-  end
-
-  def destory
-  end
-
-  private
-
-    def task_params
-      params.require(:task).permit(:name, :deadline)
-    end
-
-    def update_params
-      params.require(:task).permit(:name, :complete_flg)
-    end
-
-    def update_sort_params
-      params.require(:task).permit(:id, :target_id, :target_kanban_id)
     end
 end

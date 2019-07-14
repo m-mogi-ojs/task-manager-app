@@ -39,6 +39,9 @@
                       <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
                       <span class="task"><%= task.name %></span>
                       <input type="text" class="input is-small task-edit" style="display: none"/>
+                      <%= link_to task_path(task), remote: true, method: :delete do %>
+                        <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.75rem;"></i>
+                      <% end %>
                       <i class="complete-flg far fa<% if task.complete_flg %>-check<%end%>-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
                       <input type="hidden" name="task-id" value="<%=task.id%>">
                     </div>
