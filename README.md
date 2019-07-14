@@ -3,7 +3,7 @@ docker-compose build
 docker-compose up -d  
 docekr-compose exec web bash  
 
-# 初回用メモ 
+# init
 rails db:create  
 rails db:migrate
 
@@ -11,3 +11,6 @@ rails db:migrate
 cd ./web  
 heroku container:push web  
 heroku container:relase web  
+  
+# heroku reset db
+heroku pg:reset DATABASE_URL  
