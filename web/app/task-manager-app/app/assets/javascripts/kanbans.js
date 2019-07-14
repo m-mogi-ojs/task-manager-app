@@ -78,6 +78,9 @@ $(function(){
                       <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
                       <span class="task">`+$taskAddInput.val()+`</span>
                       <input type="text" class="input is-small task-edit" style="display: none"/>
+                      <a data-remote="true" rele="nofollow" data-method="delete" href="/tasks/`+response.task_id+`">
+                        <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.75rem;"></i>
+                      </a>
                       <i class="complete-flg far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
                       <input type="hidden" name="task-id" value="`+response.task_id+`<%=task.id%>">
                     </div>
@@ -194,7 +197,7 @@ $(function(){
     var isDummy = false;
     var isDiffKanban = false
     // 同じtaskRowにdropされたら処理を中断
-    if ($taskRow.is($targetTaskRow) || $draggingObj == null){
+    if ($draggingObj == null || $taskRow.is($targetTaskRow)){
       $(this).css('padding-top', '0rem');
       return
     }

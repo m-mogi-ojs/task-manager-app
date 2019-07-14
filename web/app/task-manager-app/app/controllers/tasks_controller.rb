@@ -35,7 +35,7 @@ class TasksController < ApplicationController
       #別のかんばんの間へ移動したい場合
       moveTaskToOtherKanban(from_task, to_task)
     elsif to_task.empty? && params[:task][:target_kanban_id].present?
-      #かんばんの最後へ移動
+      #別のかんばんの最後へ移動
       moveTaskToOtherKanbanLatest(from_task, to_task)
     else
       #かんばんの移動なし
@@ -49,9 +49,18 @@ class TasksController < ApplicationController
   def destroy
     @task = Task.includes(:kanban).find(params[:id])
     if @task.kanban.user_id == current_user.id
-      @task.destroy
       #sort順変更
+      sortTasks = Task
+                .joins(:kanban)
+                .where(kanbans: {user_id: current_user.id})
+                .where('sort > ?', @task.sort)
+                .find_each do |e|
+                  e.sort = e.sort - 1
+                  e.save!
+                end
+      @task.destroy
     end
+    #render json: { response: 'ok'}
     redirect_to root_url
   end
 
