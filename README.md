@@ -1,4 +1,5 @@
-# Description docker-compose and in container
+# Description
+ docker-compose and in container
 docker-compose build  
 docker-compose up -d  
 docekr-compose exec web bash  
