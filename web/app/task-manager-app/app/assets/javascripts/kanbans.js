@@ -45,6 +45,14 @@ $(function(){
     $taskAdd.find("input").show().focus();
   });
 
+  // Enterでもタスクの追加ができるように
+  $(".task-add").keydown(function() {
+    const keyCodeEnter = 13;
+    if (event.keyCode === keyCodeEnter) {
+      $(".task-add-input").blur();
+    }
+  })
+
   // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
   $(".task-add-input").blur(function() {
     var $taskAddInput = $(this);
