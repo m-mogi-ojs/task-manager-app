@@ -50,6 +50,9 @@ $(function(){
     const keyCodeEnter = 13;
     if (event.keyCode === keyCodeEnter) {
       $(".task-add-input").blur();
+      if ($(this).find("input").val() !== "") {
+        $(this).click();
+      }
     }
   })
 

@@ -106,7 +106,7 @@ class TasksController < ApplicationController
     
     def moveTaskToOtherKanbanLatest(from_task, to_task)
       #かんばんの所有者チェック
-      kanban = Kanban.find_by(id: params[:task][:target_kanban_id], user_id: current_user.id)
+      kanban = Kanban.includes(:tasks).find_by(id: params[:task][:target_kanban_id], user_id: current_user.id)
       return render status: 400, json: {response: 'ng'} if kanban.blank?
 
       tasks = Task
@@ -117,7 +117,7 @@ class TasksController < ApplicationController
       tasks.each_with_index do |e, i|
         if i == 0
           e.kanban_id = params[:task][:target_kanban_id]
-          e.sort = Task.where(kanban_id: params[:task][:target_kanban_id]).length
+          e.sort = kanban.tasks.maximum(:sort)
         else
           e.sort -= 1
         end
