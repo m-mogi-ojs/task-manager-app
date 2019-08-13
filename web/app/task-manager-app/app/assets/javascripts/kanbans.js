@@ -206,7 +206,7 @@ $(function(){
     var isDiffKanban = false
     // 同じtaskRowにdropされたら処理を中断
     if ($draggingObj == null || $taskRow.is($targetTaskRow)){
-      $(this).css('padding-top', '0rem');
+      $(this).css('padding-top', '');
       return
     }
 
@@ -222,9 +222,6 @@ $(function(){
     if ($taskRow.parent().find(".kanban-row").attr("data-kanban-id") !== $targetTaskRow.parent().find(".kanban-row").attr("data-kanban-id")) {
       isDiffKanban = true;
     }
-    console.log("isDummy:"+isDummy)
-    console.log("isDiffKanban:"+isDiffKanban)
-
 
     // taskrowが取得できた場合
     if ($targetTaskRow !== null) {
@@ -251,7 +248,7 @@ $(function(){
       }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
       });
     }
-    $(this).css('padding-top', '0.5rem');
+    $(this).css('padding-top', '');
   });
 
   // dragenter, dragleave
@@ -259,7 +256,7 @@ $(function(){
     $(this).css('padding-top', '1.5rem');
   })
   $(".task-row").on('dragleave', function(e){
-    $(this).css('padding-top', '0.5rem');
+    $(this).css('padding-top', '');
   })
 
   // モバイル時にタスク入れ替えボタンを表示する

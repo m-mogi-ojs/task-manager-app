@@ -126,6 +126,7 @@ class TasksController < ApplicationController
     end
 
     def moveTaskToSameKanban(from_task, to_task)
+      # target_id.empty? タスクを一番下へ
       if params[:task][:target_id].empty?
         tasks = Task
                           .where(kanban_id: from_task.first.kanban_id)
@@ -146,6 +147,7 @@ class TasksController < ApplicationController
         minSort = [from_task.first.sort, to_task.first.sort].min
         isMaxFrom = (maxSort == from_task.first.sort)
         sort = isMaxFrom ? 'sort desc' : :sort 
+        maxSort = isMaxFrom ? maxSort : maxSort-1
         tasks = Task
                   .where(kanban_id: from_task.first.kanban_id)
                   .where(sort: minSort..maxSort)
