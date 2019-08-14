@@ -79,28 +79,28 @@ class TasksController < ApplicationController
     end
 
     def moveTaskToOtherKanban(from_task, to_task)
-      tasks = Task
-                .where(kanban_id: from_task.first.kanban_id)
-                .where('sort >= ?', from_task.first.sort)
-                .or(Task.where(kanban_id: to_task.first.kanban_id).where('sort >= ?', to_task.first.sort))
-                .order(:sort)
-                .load()
-
-      tasks.select{ |e| e.kanban_id == to_task.first.kanban_id }.each do |e|
-        #対象のかんばんBのsortを全て+1
-        e.sort += 1
-        e.save!
-      end
-      tasks.select{ |e| e.kanban_id == from_task.first.kanban_id }.each_with_index do |e, i|
-        #かんばんAのリクエストのデータのkanban_idをかんばんBに変更
-        #残りの対象のsortを全て-1
-        if i == 0
-          e.kanban_id = to_task.first.kanban_id
-          e.sort = to_task.first.sort
-        else
-          e.sort -= 1
+      Task.transaction do
+        from_tasks = Task
+                  .where(kanban_id: from_task.first.kanban_id)
+                  .where('sort >= ?', from_task.first.sort)
+                  .order(:sort)
+        to_tasks = Task
+                  .where(kanban_id: to_task.first.kanban_id)
+                  .where('sort >= ?', to_task.first.sort)
+                  .order(:sort)
+        from_tasks.each_with_index do |e, i|
+          if i == 0
+            e.kanban_id = to_task.first.kanban_id
+            e.sort = to_task.first.sort
+          else
+            e.sort -= 1
+          end
+          e.save!
         end
-        e.save!
+        to_tasks.each do |e|
+          e.sort += 1
+          e.save!
+        end
       end
     end
     
