@@ -1,4 +1,5 @@
 $(function(){
+  const KEY_CODE_ENTER = 13;
   // タスク名クリック時にテキストボックスを表示
   $(".task").on('click', function() {
     var $task = $(this);
@@ -7,6 +8,15 @@ $(function(){
     $task.parent().find(".complete-flg").hide();
     $task.parent().find("i").hide();
   });
+
+  $(".task-edit").keydown(function() {
+    if (event.keyCode === KEY_CODE_ENTER) {
+      $(this).blur();
+      if ($(this).val() !== "") {
+        $(this).click();
+      }
+    }
+  })
 
   // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
   $(".task-edit").blur(function() {
@@ -47,8 +57,7 @@ $(function(){
 
   // Enterでもタスクの追加ができるように
   $(".task-add").keydown(function() {
-    const keyCodeEnter = 13;
-    if (event.keyCode === keyCodeEnter) {
+    if (event.keyCode === KEY_CODE_ENTER) {
       $(".task-add-input").blur();
       if ($(this).find("input").val() !== "") {
         $(this).click();
@@ -190,19 +199,55 @@ $(function(){
   });
 
   // タスクのドロップイベント
-  initDragEvent($(".task-row"));
-
   var $draggingObj = null;
+  initDragEvent($(".task-row"));
+  addDragEvent($(".task-row"));
 
-  $(".task-row").on('dragstart', function(e){
+  // モバイル時にタスク入れ替えボタンを表示する
+  $(".fa-arrows-alt-v").each(function() {
+    if (navigator.userAgent.match(/(iPhone|iPad|iPod|Android)/i)) {
+      $(this).parent().append('<i class="fas fa-caret-square-down is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>');
+      $(this).parent().append('<i class="fas fa-caret-square-up is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>');
+      $(this).remove();
+      // TODO:ボタンのイベントを登録する
+    }
+  });
+
+});
+
+var hasCheck = function($obj) {
+  return $obj.attr("class").split(" ").includes("fa-check-square") ? 1 : 0;
+}
+
+var initDragEvent = function($obj){
+  $obj.on('drop', function(e){
+    e.preventDefault();
+    e.stopPropagation()
+  });
+  $obj.on('dragover', function(e){
+    e.preventDefault();
+    e.stopPropagation()
+  });
+  $obj.on('dragenter', function(e){
+    e.preventDefault();
+    e.stopPropagation()
+  });
+  $obj.on('dragleave', function(e){
+    e.preventDefault();
+    e.stopPropagation()
+  });
+}
+
+var addDragEvent = function($obj) {
+  $obj.on('dragstart', function(e){
     if ($(this).hasClass("task-row-dummy")){
       $draggingObj = null;
-      return
+      return;
     }
     $draggingObj = $(this)
   });
 
-  $(".task-row").on('drop', function(e){
+  $obj.on('drop', function(e){
     var $taskRow = $draggingObj;
     var $targetTaskRow = $(this);
     var isDummy = false;
@@ -255,44 +300,11 @@ $(function(){
   });
 
   // dragenter, dragleave
-  $(".task-row").on('dragenter', function(e){
-    $(this).css('padding-top', '1.5rem');
-  })
-  $(".task-row").on('dragleave', function(e){
-    $(this).css('padding-top', '');
-  })
-
-  // モバイル時にタスク入れ替えボタンを表示する
-  $(".fa-arrows-alt-v").each(function() {
-    if (navigator.userAgent.match(/(iPhone|iPad|iPod|Android)/i)) {
-      $(this).parent().append('<i class="fas fa-caret-square-down is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>');
-      $(this).parent().append('<i class="fas fa-caret-square-up is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>');
-      $(this).remove();
-      // TODO:ボタンのイベントを登録する
-    }
-  });
-
-});
-
-var hasCheck = function($obj) {
-  return $obj.attr("class").split(" ").includes("fa-check-square") ? 1 : 0;
-}
-
-var initDragEvent = function($obj){
-  $obj.on('drop', function(e){
-    e.preventDefault();
-    e.stopPropagation()
-  });
-  $obj.on('dragover', function(e){
-    e.preventDefault();
-    e.stopPropagation()
-  });
   $obj.on('dragenter', function(e){
-    e.preventDefault();
-    e.stopPropagation()
+    $(this).css('padding-top', '1.5rem');
   });
+
   $obj.on('dragleave', function(e){
-    e.preventDefault();
-    e.stopPropagation()
+    $(this).css('padding-top', '');
   });
 }
