@@ -1,6 +1,6 @@
 const KEY_CODE_ENTER = 13;
 $(function(){
-  initTaskEvent($(".task"));
+  initTaskEvent($(".task-name"));
   initTaskEditEvent($(".task-edit"));
   initTaskAddEvent($(".task-add"));
   initKanbanEvent();
@@ -113,7 +113,7 @@ var addDragEvent = function($obj) {
     }
 
     // タスク名にdropした場合task.parentでtask-rowに変更
-    if ($targetTaskRow.attr("class") === "task") {
+    if ($targetTaskRow.attr("class") === "task-name") {
       $targetTaskRow = $targetTaskRow.parent();
     }
     // dummyにdropした場合はisDummyフラグを立てる
@@ -189,7 +189,7 @@ var initTaskEditEvent = function($obj) {
     var $taskEdit = $(this);
     $taskEdit.hide();
     var $taskRow = $taskEdit.parent();
-    var $task = $taskRow.find('.task');
+    var $task = $taskRow.find('.task-name');
     var $completeFlg = $taskRow.find('.complete-flg');
     var $images = $taskRow.find("i");
     $task.text($taskEdit.val()).show();
@@ -265,7 +265,7 @@ var initTaskAddEvent = function($obj) {
         `
                     <div class="task-row dot-border-bottom" draggable="true" data-sort="`+response.sort+`" data-task-id="`+response.task_id+`">
                       <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                      <span class="task">`+$taskAddInput.val()+`</span>
+                      <span class="task-name">`+$taskAddInput.val()+`</span>
                       <input type="text" class="input is-small task-edit" style="display: none"/>
                       <a data-remote="true" rele="nofollow" data-method="delete" href="/tasks/`+response.task_id+`">
                         <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.75rem;"></i>

@@ -1,10 +1,6 @@
 <div class="container has-text-centered">
   <% if @kanbans.any? %>
-    <div>
-      <%= render 'form'%>
-      <!--カラムを縦並び、2xn、3xnに変更できるようにしたい-->
-      <i class="fas fa-th is-pulled-left" style="font-size: 1.25rem; margin-top: 0.75rem; margin-left: 0.25rem; margin-right: 1rem;"></i>
-    </div>
+    <%= render 'form'%>
     <div class="kanban-container">
       <div class="columns is-mobile is-multiline is-centered">
         <% @kanbans.each_with_index do |kanban, kanbanIndex| %>
@@ -37,7 +33,7 @@
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
                     <div class="task-row dot-border-bottom" draggable="true" data-sort="<%=task.sort%>" data-task-id="<%=task.id%>">
                       <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                      <span class="task"><%= task.name %></span>
+                      <span class="task-name"><%= task.name %></span>
                       <input type="text" class="input is-small task-edit" style="display: none"/>
                       <%= link_to task_path(task), remote: true, method: :delete do %>
                         <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.75rem;"></i>
