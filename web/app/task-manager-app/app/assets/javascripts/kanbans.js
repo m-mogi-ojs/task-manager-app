@@ -1,155 +1,9 @@
+const KEY_CODE_ENTER = 13;
 $(function(){
-  const KEY_CODE_ENTER = 13;
-  // タスク名クリック時にテキストボックスを表示
-  $(".task").on('click', function() {
-    var $task = $(this);
-    $task.hide();
-    $task.parent().find('.task-edit').val($task.text()).show().focus();
-    $task.parent().find(".complete-flg").hide();
-    $task.parent().find("i").hide();
-  });
-
-  $(".task-edit").keydown(function() {
-    if (event.keyCode === KEY_CODE_ENTER) {
-      $(this).blur();
-      if ($(this).val() !== "") {
-        $(this).click();
-      }
-    }
-  })
-
-  // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
-  $(".task-edit").blur(function() {
-    var $taskEdit = $(this);
-    $taskEdit.hide();
-    var $taskRow = $taskEdit.parent();
-    var $task = $taskRow.find('.task');
-    var $completeFlg = $taskRow.find('.complete-flg');
-    var $images = $taskRow.find("i");
-    $task.text($taskEdit.val()).show();
-    $completeFlg.show();
-    $images.show();
-    // ajaxでデータ更新
-    $.ajax({
-      type: "PATCH",
-      url: "/tasks/" + $taskRow.find('input[name="task-id"]').val(),
-      timeout: 10000,
-      cache: false,
-      data: {'task': {'name': $taskEdit.val()}},
-      dataType: 'json'
-    }).done(function (response, textStatus, jqXHR) {
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-      alert("fail: Internal server error or not response");
-      $task.hide();
-      $task.text($task.val()).show();
-      $completeFlg.show();
-    }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-    });
-  });
-
-  // タスクを追加するクリック時にテキストボックスを表示
-  $(".task-add").on('click', function() {
-    var $taskAdd = $(this);
-    $taskAdd.find("span").hide();
-    $taskAdd.find("input").show().focus();
-  });
-
-  // Enterでもタスクの追加ができるように
-  $(".task-add").keydown(function() {
-    if (event.keyCode === KEY_CODE_ENTER) {
-      $(".task-add-input").blur();
-      if ($(this).find("input").val() !== "") {
-        $(this).click();
-      }
-    }
-  })
-
-  // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
-  $(".task-add-input").blur(function() {
-    var $taskAddInput = $(this);
-    var $taskAdd = $taskAddInput.parent();
-    var $cardContent = $taskAdd.parent();
-    //inputを非表示に
-    $taskAddInput.hide();
-    //spanを表示に
-    $taskAdd.find("span").show();
-    //空だったらコールしない
-    if ($taskAddInput.val() == "") {
-      return
-    }
-    // ajaxでデータ更新
-    $.ajax({
-      type: "POST",
-      url: "/tasks",
-      timeout: 10000,
-      cache: false,
-      data: {'task': {
-        'name': $taskAddInput.val(),
-      },
-      'kanban_id': $cardContent.attr("data-kanban-id")
-    },
-      dataType: 'json'
-    }).done(function (response, textStatus, jqXHR) {
-      //追加タスクをかんばんに追加
-      $cardContent.find(".task-row-dummy").before(
-        `
-                    <div class="task-row dot-border-bottom" draggable="true" data-sort="`+response.sort+`" data-task-id="`+response.task_id+`">
-                      <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                      <span class="task">`+$taskAddInput.val()+`</span>
-                      <input type="text" class="input is-small task-edit" style="display: none"/>
-                      <a data-remote="true" rele="nofollow" data-method="delete" href="/tasks/`+response.task_id+`">
-                        <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.75rem;"></i>
-                      </a>
-                      <i class="complete-flg far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                      <input type="hidden" name="task-id" value="`+response.task_id+`<%=task.id%>">
-                    </div>
-        `
-      );
-      //inputの内容をリセット
-      $taskAddInput.val("");
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-      alert("fail: Internal server error or not response");
-    }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-    });
-  });
-
-  // かんばん名クリック時にテキストボックスを表示
-  $(".kanban").on('click', function() {
-    var $kanban = $(this);
-    $kanban.hide();
-    $kanban.parent().find('.kanban-edit').val($kanban.text()).show().focus();
-    $kanban.parent().find(".complete-flg").hide();
-  });
-
-  // かんばん名テキストボックスからフォーカスを外した際にタスク名に反映
-  $(".kanban-edit").blur(function() {
-    var $kanbanEdit = $(this);
-    $kanbanEdit.hide();
-    var $kanbanRow = $kanbanEdit.parent();
-    var $kanban = $kanbanRow.find('.kanban');
-    var $completeFlg = $kanbanRow.find('.complete-flg');
-    $kanban.text($kanbanEdit.val()).show();
-    $completeFlg.show();
-    // ajaxでデータ更新
-    $.ajax({
-      type: "PATCH",
-      url: "/kanbans/" + $kanbanRow.find('input[name="kanban-id"]').val(),
-      timeout: 10000,
-      cache: false,
-      data: {'kanban': {'name': $kanbanEdit.val()}},
-      dataType: 'json'
-    }).done(function (response, textStatus, jqXHR) {
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-      alert("fail: Internal server error or not response");
-      $kanban.hide();
-      $kanban.text($kanban.val()).show();
-      $completeFlg.show();
-    }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-    });
-  });
+  initTaskEvent($(".task"));
+  initTaskEditEvent($(".task-edit"));
+  initTaskAddEvent($(".task-add"));
+  initKanbanEvent();
 
   // タスクチェックボックス処理
   $(".complete-flg").click(function() {
@@ -306,5 +160,166 @@ var addDragEvent = function($obj) {
 
   $obj.on('dragleave', function(e){
     $(this).css('padding-top', '');
+  });
+}
+
+var initTaskEvent = function($obj) {
+  // タスク名クリック時にテキストボックスを表示
+  $obj.on('click', function() {
+    var $task = $(this);
+    $task.hide();
+    $task.parent().find('.task-edit').val($task.text()).show().focus();
+    $task.parent().find(".complete-flg").hide();
+    $task.parent().find("i").hide();
+  });
+}
+
+var initTaskEditEvent = function($obj) {
+  $obj.keydown(function() {
+    if (event.keyCode === KEY_CODE_ENTER) {
+      $(this).blur();
+      if ($(this).val() !== "") {
+        $(this).click();
+      }
+    }
+  })
+
+  // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
+  $obj.blur(function() {
+    var $taskEdit = $(this);
+    $taskEdit.hide();
+    var $taskRow = $taskEdit.parent();
+    var $task = $taskRow.find('.task');
+    var $completeFlg = $taskRow.find('.complete-flg');
+    var $images = $taskRow.find("i");
+    $task.text($taskEdit.val()).show();
+    $completeFlg.show();
+    $images.show();
+    // ajaxでデータ更新
+    $.ajax({
+      type: "PATCH",
+      url: "/tasks/" + $taskRow.find('input[name="task-id"]').val(),
+      timeout: 10000,
+      cache: false,
+      data: {'task': {'name': $taskEdit.val()}},
+      dataType: 'json'
+    }).done(function (response, textStatus, jqXHR) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      alert("fail: Internal server error or not response");
+      $task.hide();
+      $task.text($task.val()).show();
+      $completeFlg.show();
+    }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+    });
+  });
+
+}
+
+var initTaskAddEvent = function($obj) {
+  // タスクを追加するクリック時にテキストボックスを表示
+  $obj.on('click', function() {
+    var $taskAdd = $(this);
+    $taskAdd.find("span").hide();
+    $taskAdd.find("input").show().focus();
+  });
+
+  // Enterでもタスクの追加ができるように
+  $obj.keydown(function() {
+    if (event.keyCode === KEY_CODE_ENTER) {
+      $(".task-add-input").blur();
+      if ($(this).find("input").val() !== "") {
+        $(this).click();
+      }
+    }
+  })
+
+  // タスク名テキストボックスからフォーカスを外した際にタスク名に反映
+  $obj.find(".task-add-input").blur(function() {
+    var $taskAddInput = $(this);
+    var $taskAdd = $taskAddInput.parent();
+    var $cardContent = $taskAdd.parent();
+    //inputを非表示に
+    $taskAddInput.hide();
+    //spanを表示に
+    $taskAdd.find("span").show();
+    //空だったらコールしない
+    if ($taskAddInput.val() == "") {
+      return
+    }
+    // ajaxでデータ更新
+    $.ajax({
+      type: "POST",
+      url: "/tasks",
+      timeout: 10000,
+      cache: false,
+      data: {'task': {
+        'name': $taskAddInput.val(),
+      },
+      'kanban_id': $cardContent.attr("data-kanban-id")
+    },
+      dataType: 'json'
+    }).done(function (response, textStatus, jqXHR) {
+      //追加タスクをかんばんに追加
+      $cardContent.find(".task-row-dummy").before(
+        `
+                    <div class="task-row dot-border-bottom" draggable="true" data-sort="`+response.sort+`" data-task-id="`+response.task_id+`">
+                      <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                      <span class="task">`+$taskAddInput.val()+`</span>
+                      <input type="text" class="input is-small task-edit" style="display: none"/>
+                      <a data-remote="true" rele="nofollow" data-method="delete" href="/tasks/`+response.task_id+`">
+                        <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.75rem;"></i>
+                      </a>
+                      <i class="complete-flg far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                      <input type="hidden" name="task-id" value="`+response.task_id+`<%=task.id%>">
+                    </div>
+        `
+      );
+      //inputの内容をリセット
+      $taskAddInput.val("");
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      alert("fail: Internal server error or not response");
+    }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+    });
+  });
+
+}
+
+var initKanbanEvent = function() {
+  // かんばん名クリック時にテキストボックスを表示
+  $(".kanban-name").on('click', function() {
+    var $kanban = $(this);
+    $kanban.hide();
+    $kanban.parent().find('.kanban-edit').val($kanban.text()).show().focus();
+    $kanban.parent().find(".complete-flg").hide();
+  });
+
+  // かんばん名テキストボックスからフォーカスを外した際にタスク名に反映
+  $(".kanban-edit").blur(function() {
+    var $kanbanEdit = $(this);
+    $kanbanEdit.hide();
+    var $kanbanRow = $kanbanEdit.parent();
+    var $kanban = $kanbanRow.find('.kanban');
+    var $completeFlg = $kanbanRow.find('.complete-flg');
+    $kanban.text($kanbanEdit.val()).show();
+    $completeFlg.show();
+    // ajaxでデータ更新
+    $.ajax({
+      type: "PATCH",
+      url: "/kanbans/" + $kanbanRow.find('input[name="kanban-id"]').val(),
+      timeout: 10000,
+      cache: false,
+      data: {'kanban': {'name': $kanbanEdit.val()}},
+      dataType: 'json'
+    }).done(function (response, textStatus, jqXHR) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      alert("fail: Internal server error or not response");
+      $kanban.hide();
+      $kanban.text($kanban.val()).show();
+      $completeFlg.show();
+    }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+    });
   });
 }

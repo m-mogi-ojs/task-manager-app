@@ -12,7 +12,7 @@
             <div class="card">
               <div class="card-content" data-kanban-id="<%=kanban.id%>">
                 <div class="kanban-row" style="border-bottom: 0.04rem solid #000000;" data-kanban-id="<%=kanban.id%>">
-                  <span class="kanban"><%= kanban.name %></span>
+                  <span class="kanban-name"><%= kanban.name %></span>
                   <input type="text" class="input is-small kanban-edit" style="display: none"/>
                   <%= link_to kanban_path(kanban), remote: true, method: :delete do %>
                     <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
