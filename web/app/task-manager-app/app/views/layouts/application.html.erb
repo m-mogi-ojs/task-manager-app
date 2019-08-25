@@ -12,8 +12,7 @@
   </head>
 
   <body>
-    <div class="hero is-info">
-      <div class="hero-head dot-border-bottom">
+      <div class="dot-border-bottom">
         <nav class="navbar is-link" role="navigation" aria-label="main navigation">
           <div class="navbar-brand">
             <a class="navbar-item" href="#">
@@ -41,16 +40,15 @@
       <% flash.each do |message_type, message| %>
         <%= content_tag(:div, message, class: "is-pulled-right alert alert-#{message_type}") %>
       <% end %>
-      <div class="hero-body dot-border-bottom">
+      <div class="dot-border-bottom has-background-info">
         <%= yield %>
       </div>
-      <div class="hero-foot">
-        <div class="content has-text-centered has-text-black">
+      <div class="is-light">
+        <div class="has-text-centered has-text-black has-background-link">
           <p>
             Footer
           </p>
         </div>
       </div>
-    </div>
   </body>
 </html>
