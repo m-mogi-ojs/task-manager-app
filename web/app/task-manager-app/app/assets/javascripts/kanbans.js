@@ -42,8 +42,11 @@ $(function(){
   $(".search-box").on('change', function(){
     $select = $(this);
     var completeFlg = $select.val();
-    $select.parent().parent().parent().parent().find(".task-row").each(function(i, e) {
+    $select.parents(".card-content").find(".task-row").each(function(i, e) {
       var $obj = $(e);
+      if($obj.hasClass("task-row-dummy")) {
+        return;
+      }
       if (completeFlg === "" || completeFlg == hasCheck($obj.find(".complete-flg"))) {
         $obj.show();
       } else {
