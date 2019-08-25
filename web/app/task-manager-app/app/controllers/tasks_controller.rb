@@ -31,15 +31,18 @@ class TasksController < ApplicationController
               .where(kanbans: {user_id: current_user.id})
               .where(id: params[:task][:target_id])
               .load()
+    return render status: 400, json: {response: 'Invalid parameter [id].'} if from_task.empty? 
     if !to_task.empty? && from_task.first.kanban_id != to_task.first.kanban_id
       #別のかんばんの間へ移動したい場合
       moveTaskToOtherKanban(from_task, to_task)
     elsif to_task.empty? && params[:task][:target_kanban_id].present?
       #別のかんばんの最後へ移動
-      moveTaskToOtherKanbanLatest(from_task, to_task)
-    else
+      moveTaskToOtherKanbanLatest(from_task)
+    elsif !to_task.empty?
       #かんばんの移動なし
       moveTaskToSameKanban(from_task, to_task)
+    else
+      return render status: 400, json: {response: 'Invalid parameter.'}
     end
       
     render json: { response: 'ok'}
@@ -88,6 +91,7 @@ class TasksController < ApplicationController
                   .where(kanban_id: to_task.first.kanban_id)
                   .where('sort >= ?', to_task.first.sort)
                   .order(:sort)
+                  .load()
         from_tasks.each_with_index do |e, i|
           if i == 0
             e.kanban_id = to_task.first.kanban_id
@@ -104,24 +108,27 @@ class TasksController < ApplicationController
       end
     end
     
-    def moveTaskToOtherKanbanLatest(from_task, to_task)
-      #かんばんの所有者チェック
-      kanban = Kanban.includes(:tasks).find_by(id: params[:task][:target_kanban_id], user_id: current_user.id)
-      return render status: 400, json: {response: 'ng'} if kanban.blank?
-
-      tasks = Task
-                .where(kanban_id: from_task.first.kanban_id)
-                .where('sort >= ?', from_task.first.sort)
-                .order(:sort)
-                .load()
-      tasks.each_with_index do |e, i|
-        if i == 0
-          e.kanban_id = params[:task][:target_kanban_id]
-          e.sort = kanban.tasks.maximum(:sort)
-        else
-          e.sort -= 1
+    def moveTaskToOtherKanbanLatest(from_task)
+      Task.transaction do
+        tasks = Task
+                  .where(kanban_id: from_task.first.kanban_id)
+                  .where('sort >= ?', from_task.first.sort)
+                  .order(:sort)
+                  .load()
+        target_latest_task = Task
+                  .where(kanban_id: params[:task][:target_kanban_id])
+                  .order('sort desc')
+                  .limit(1)
+                  .load()
+        tasks.each_with_index do |e, i|
+          if i == 0
+            e.kanban_id = params[:task][:target_kanban_id]
+            e.sort = target_latest_task.first.sort + 1
+          else
+            e.sort -= 1
+          end
+          e.save!
         end
-        e.save!
       end
     end
 
