@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  before_action :logged_in_user, only: [:create, :update, :update_sort]
+
   def create
     kanban = Kanban.find(params[:kanban_id])
     @task = kanban.tasks.build(task_params)
@@ -34,13 +36,13 @@ class TasksController < ApplicationController
     return render status: 400, json: {response: 'Invalid parameter [id].'} if from_task.empty? 
     if !to_task.empty? && from_task.first.kanban_id != to_task.first.kanban_id
       #別のかんばんの間へ移動したい場合
-      moveTaskToOtherKanban(from_task, to_task)
+      move_task_to_other_kanban(from_task, to_task)
     elsif to_task.empty? && params[:task][:target_kanban_id].present?
       #別のかんばんの最後へ移動
-      moveTaskToOtherKanbanLatest(from_task)
+      move_task_to_other_kanban_latest(from_task)
     elsif !to_task.empty?
       #かんばんの移動なし
-      moveTaskToSameKanban(from_task, to_task)
+      move_task_to_same_kanban(from_task, to_task)
     else
       return render status: 400, json: {response: 'Invalid parameter.'}
     end
@@ -53,14 +55,13 @@ class TasksController < ApplicationController
     @task = Task.includes(:kanban).find(params[:id])
     if @task.kanban.user_id == current_user.id
       #sort順変更
-      sortTasks = Task
-                .joins(:kanban)
-                .where(kanbans: {user_id: current_user.id})
-                .where('sort > ?', @task.sort)
-                .find_each do |e|
-                  e.sort = e.sort - 1
-                  e.save!
-                end
+      Task.joins(:kanban)
+          .where(kanbans: {user_id: current_user.id})
+          .where('sort > ?', @task.sort)
+          .find_each do |e|
+            e.sort = e.sort - 1
+            e.save!
+          end
       @task.destroy
     end
     #render json: { response: 'ok'}
@@ -81,7 +82,7 @@ class TasksController < ApplicationController
       params.require(:task).permit(:id, :target_id, :target_kanban_id)
     end
 
-    def moveTaskToOtherKanban(from_task, to_task)
+    def move_task_to_other_kanban(from_task, to_task)
       Task.transaction do
         from_tasks = Task
                   .where(kanban_id: from_task.first.kanban_id)
@@ -108,7 +109,7 @@ class TasksController < ApplicationController
       end
     end
     
-    def moveTaskToOtherKanbanLatest(from_task)
+    def move_task_to_other_kanban_latest(from_task)
       Task.transaction do
         tasks = Task
                   .where(kanban_id: from_task.first.kanban_id)
@@ -132,7 +133,7 @@ class TasksController < ApplicationController
       end
     end
 
-    def moveTaskToSameKanban(from_task, to_task)
+    def move_task_to_same_kanban(from_task, to_task)
       # target_id.empty? タスクを一番下へ
       if params[:task][:target_id].empty?
         tasks = Task
@@ -150,23 +151,23 @@ class TasksController < ApplicationController
       else
         #かんばん内の入れ替え
         # 更新対象を取得
-        maxSort = [from_task.first.sort, to_task.first.sort].max
-        minSort = [from_task.first.sort, to_task.first.sort].min
-        isMaxFrom = (maxSort == from_task.first.sort)
-        sort = isMaxFrom ? 'sort desc' : :sort 
-        maxSort = isMaxFrom ? maxSort : maxSort-1
+        max_sort = [from_task.first.sort, to_task.first.sort].max
+        min_sort = [from_task.first.sort, to_task.first.sort].min
+        is_max_from = (max_sort == from_task.first.sort)
+        sort = is_max_from ? 'sort desc' : :sort 
+        max_sort = is_max_from ? max_sort : max_sort-1
         tasks = Task
                   .where(kanban_id: from_task.first.kanban_id)
-                  .where(sort: minSort..maxSort)
+                  .where(sort: min_sort..max_sort)
                   .order(sort)
         # sort入れ替え処理
         # min -> max -1
         # max -1 < -> -1
         tasks.each_with_index do |e, i|
           if i == 0
-            e.sort = isMaxFrom ? minSort : maxSort
+            e.sort = is_max_from ? min_sort : max_sort
           else
-            e.sort = e.sort + (isMaxFrom ? 1 : -1)
+            e.sort = e.sort + (is_max_from ? 1 : -1)
           end
           e.save!
         end
