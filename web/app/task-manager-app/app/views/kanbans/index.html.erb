@@ -1,8 +1,6 @@
 <div class="container has-text-centered">
   <% if @kanbans.any? %>
-    <div>
-      <%= render 'form'%>
-    </div>
+    <%= render 'form'%>
     <div class="kanban-container">
       <div class="columns is-mobile is-multiline is-centered">
         <% @kanbans.each_with_index do |kanban, kanbanIndex| %>
@@ -10,7 +8,7 @@
             <div class="card">
               <div class="card-content" data-kanban-id="<%=kanban.id%>">
                 <div class="kanban-row" style="border-bottom: 0.04rem solid #000000;" data-kanban-id="<%=kanban.id%>">
-                  <span class="kanban"><%= kanban.name %></span>
+                  <span class="kanban-name"><%= kanban.name %></span>
                   <input type="text" class="input is-small kanban-edit" style="display: none"/>
                   <%= link_to kanban_path(kanban), remote: true, method: :delete do %>
                     <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
@@ -35,7 +33,7 @@
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
                     <div class="task-row dot-border-bottom" draggable="true" data-sort="<%=task.sort%>" data-task-id="<%=task.id%>">
                       <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                      <span class="task"><%= task.name %></span>
+                      <span class="task-name"><%= task.name %></span>
                       <input type="text" class="input is-small task-edit" style="display: none"/>
                       <%= link_to task_path(task), remote: true, method: :delete do %>
                         <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.75rem;"></i>
