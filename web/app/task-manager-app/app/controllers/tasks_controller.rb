@@ -40,11 +40,9 @@ class TasksController < ApplicationController
     elsif to_task.empty? && params[:task][:target_kanban_id].present?
       #別のかんばんの最後へ移動
       move_task_to_other_kanban_latest(from_task)
-    elsif !to_task.empty?
+    else !to_task.empty?
       #かんばんの移動なし
       move_task_to_same_kanban(from_task, to_task)
-    else
-      return render status: 400, json: {response: 'Invalid parameter.'}
     end
       
     render json: { response: 'ok'}
