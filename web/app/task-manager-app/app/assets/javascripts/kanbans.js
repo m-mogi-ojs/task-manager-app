@@ -148,7 +148,6 @@ var addDragEvent = function($obj) {
       }).done(function (response, textStatus, jqXHR) {
         $taskRow.clone(true).insertBefore($targetTaskRow);
         $taskRow.remove();
-        console.log("/tasks/update/sort done.")
       }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log(jqXHR);
         alert("fail: Internal server error or not response");
