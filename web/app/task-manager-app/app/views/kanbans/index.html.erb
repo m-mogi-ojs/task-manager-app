@@ -4,46 +4,45 @@
     <div class="kanban-container">
       <div class="columns is-mobile is-multiline is-centered">
         <% @kanbans.each_with_index do |kanban, kanbanIndex| %>
-          <div class="column is-12-touch is-6-desktop">
+          <div class="column is-12-touch is-4-desktop">
             <div class="card">
               <div class="card-content" data-kanban-id="<%=kanban.id%>">
-                <div class="kanban-row" style="border-bottom: 0.04rem solid #000000;" data-kanban-id="<%=kanban.id%>">
+                <div class="kanban-row" data-kanban-id="<%=kanban.id%>">
                   <span class="kanban-name"><%= kanban.name %></span>
                   <input type="text" class="input is-small kanban-edit" style="display: none"/>
                   <%= link_to kanban_path(kanban), remote: true, method: :delete do %>
-                    <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                    <i class="far fa-times-circle is-pulled-right"></i>
                   <% end %>
                   <input type="hidden" name="kanban-id" value="<%=kanban.id%>">
                 </div>
-                  <div style="padding-top: 0.5rem; text-align: right;">
-                    <div class="control has-icons-left" style="display: inline;">
-                      <div class="select is-small">
-                        <select class="search-box is-pulled-right" style="">
-                          <option value="">全て</option>
-                          <option value="1">チェック済み</option>
-                          <option value="0">未チェック</option>
-                        </select>
-                        <span class="icon is-left">
-                          <i class="fas fa-search"></i>
-                        </span>
-                      </div>
-                    </div>
+                <div class="control has-icons-left has-text-right">
+                  <div class="select is-small">
+                    <select class="search-box">
+                      <option value="">全て</option>
+                      <option value="1">チェック済み</option>
+                      <option value="0">未チェック</option>
+                    </select>
+                    <span class="icon is-left">
+                      <i class="fas fa-search"></i>
+                    </span>
                   </div>
+                </div>
                 <% if kanban.tasks.any? %>
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
-                    <div class="task-row dot-border-bottom" draggable="true" data-sort="<%=task.sort%>" data-task-id="<%=task.id%>">
-                      <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
-                      <div class="task-name" style="padding-right: 3rem; padding-left: 1rem;"><%= task.name %></div>
+                    <div class="task-row" draggable="true" data-sort="<%=task.sort%>" data-task-id="<%=task.id%>">
+                      <div class="card">
+                      <span class="task-name"><%= task.name %></span>
                       <input type="text" class="input is-small task-edit" style="display: none"/>
                       <%= link_to task_path(task), remote: true, method: :delete do %>
-                        <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.75rem;"></i>
+                        <i class="far fa-times-circle is-pulled-right"></i>
                       <% end %>
-                      <i class="complete-flg far fa<% if task.complete_flg %>-check<%end%>-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                      <i class="complete-flg far fa<% if task.complete_flg %>-check<%end%>-square is-pulled-right"></i>
                       <input type="hidden" name="task-id" value="<%=task.id%>">
+                      </div>
                     </div>
                   <% end %>
                 <% end %>
-                <div class="task-row-dummy task-row" style="padding: 0.25rem;"></div>
+                <div class="task-row-dummy task-row" style="padding : 0.25rem;"></div>
                 <div class="task-add dot-border-bottom">
                   <span style="color: silver;">タスクを追加する</span>
                   <input type="text" class="input is-small task-add-input" style="display: none"/>

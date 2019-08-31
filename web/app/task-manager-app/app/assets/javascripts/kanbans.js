@@ -102,6 +102,7 @@ var addDragEvent = function($obj) {
       return;
     }
     $draggingObj = $(this)
+    $draggingObj.find(".card").addClass("has-background-grey-light");
   });
 
   $obj.on('drop', function(e){
@@ -112,6 +113,7 @@ var addDragEvent = function($obj) {
     // 同じtaskRowにdropされたら処理を中断
     if ($draggingObj == null || $taskRow.is($targetTaskRow)){
       $(this).css('padding-top', '');
+      $draggingObj.find(".card").removeClass("has-background-grey-light");
       return
     }
 
@@ -154,11 +156,12 @@ var addDragEvent = function($obj) {
       });
     }
     $(this).css('padding-top', '');
+    $draggingObj.find(".card").removeClass("has-background-grey-light");
   });
 
   // dragenter, dragleave
   $obj.on('dragenter', function(e){
-    $(this).css('padding-top', '1.5rem');
+    $(this).css('padding-top', '2.5rem');
   });
 
   $obj.on('dragleave', function(e){
@@ -266,14 +269,13 @@ var initTaskAddEvent = function($obj) {
       //追加タスクをかんばんに追加
       $cardContent.find(".task-row-dummy").before(
         `
-                    <div class="task-row dot-border-bottom" draggable="true" data-sort="`+response.sort+`" data-task-id="`+response.task_id+`">
-                      <i class="fas fa-arrows-alt-v is-pulled-left" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                    <div class="task-row card" draggable="true" data-sort="`+response.sort+`" data-task-id="`+response.task_id+`">
                       <span class="task-name">`+$taskAddInput.val()+`</span>
                       <input type="text" class="input is-small task-edit" style="display: none"/>
                       <a data-remote="true" rele="nofollow" data-method="delete" href="/tasks/`+response.task_id+`">
-                        <i class="far fa-times-circle is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.75rem;"></i>
+                        <i class="far fa-times-circle is-pulled-right"></i>
                       </a>
-                      <i class="complete-flg far fa-square is-pulled-right" style="margin-top: 0.25rem; margin-left: 0.25rem;"></i>
+                      <i class="complete-flg far fa-square is-pulled-right"></i>
                       <input type="hidden" name="task-id" value="`+response.task_id+`<%=task.id%>">
                     </div>
         `

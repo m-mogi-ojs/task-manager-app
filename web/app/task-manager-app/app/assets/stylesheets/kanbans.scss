@@ -22,12 +22,36 @@
   border-radius: 0.25rem;
 }
 
+.kanban-row {
+  border-bottom: 0.04rem solid black;
+}
+
 .dot-border-bottom {
   border-bottom: 0.04rem dashed #dddddd;
 }
 
 .task-row {
-  padding-top: 0.5rem;
+  padding-top: 0.25rem;
+  .card {
+    display: flex;
+    margin-top: 0;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+}
+
+.task-name {
+  flex-grow: 1;
+}
+
+.complete-flg {
+  margin: 0.25rem;
+  margin-bottom: 0;
+}
+
+.fa-times-circle {
+  margin-top: 0.25rem;
+  margin-left: 0.75rem;
 }
 
 .radius-right {
