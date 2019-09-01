@@ -10,8 +10,10 @@ rails db:migrate
 
 # heroku deploy
 cd ./web  
+heroku login
+heroku container:login
 heroku container:push web  
-heroku container:relase web  
+heroku container:release web  
   
 # heroku reset db
 heroku pg:reset DATABASE_URL  

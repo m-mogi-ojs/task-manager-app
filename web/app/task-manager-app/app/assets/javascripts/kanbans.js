@@ -304,7 +304,7 @@ var initKanbanEvent = function() {
     var $kanbanEdit = $(this);
     $kanbanEdit.hide();
     var $kanbanRow = $kanbanEdit.parent();
-    var $kanban = $kanbanRow.find('.kanban');
+    var $kanban = $kanbanRow.find('.kanban-name');
     var $completeFlg = $kanbanRow.find('.complete-flg');
     $kanban.text($kanbanEdit.val()).show();
     $completeFlg.show();
