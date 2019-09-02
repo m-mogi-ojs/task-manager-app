@@ -55,6 +55,7 @@ class TasksController < ApplicationController
       #sort順変更
       Task.joins(:kanban)
           .where(kanbans: {user_id: current_user.id})
+          .where(kanban_id: @task.kanban_id)
           .where('sort > ?', @task.sort)
           .find_each do |e|
             e.sort = e.sort - 1
