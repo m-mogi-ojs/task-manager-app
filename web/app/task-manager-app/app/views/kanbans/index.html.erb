@@ -31,13 +31,13 @@
                   <% kanban.tasks.each_with_index do |task, taskIndex| %>
                     <div class="task-row" draggable="true" data-sort="<%=task.sort%>" data-task-id="<%=task.id%>">
                       <div class="card">
-                      <span class="task-name"><%= task.name %></span>
-                      <input type="text" class="input is-small task-edit" style="display: none"/>
-                      <%= link_to task_path(task), remote: true, method: :delete do %>
-                        <i class="far fa-times-circle is-pulled-right"></i>
-                      <% end %>
-                      <i class="complete-flg far fa<% if task.complete_flg %>-check<%end%>-square is-pulled-right"></i>
-                      <input type="hidden" name="task-id" value="<%=task.id%>">
+                        <span class="task-name"><%= task.name %></span>
+                        <input type="text" class="input is-small task-edit" style="display: none"/>
+                        <%= link_to task_path(task), remote: true, method: :delete do %>
+                          <i class="far fa-times-circle is-pulled-right"></i>
+                        <% end %>
+                        <i class="complete-flg far fa<% if task.complete_flg %>-check<%end%>-square is-pulled-right"></i>
+                        <input type="hidden" name="task-id" value="<%=task.id%>">
                       </div>
                     </div>
                   <% end %>
