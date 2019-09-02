@@ -93,6 +93,11 @@ var initDragEvent = function($obj){
     e.preventDefault();
     e.stopPropagation()
   });
+  $obj.on('dragend', function(e){
+    e.preventDefault();
+    e.stopPropagation()
+    $draggingObj.find(".card").removeClass("has-background-grey-light");
+  });
 }
 
 var addDragEvent = function($obj) {
@@ -113,7 +118,6 @@ var addDragEvent = function($obj) {
     // 同じtaskRowにdropされたら処理を中断
     if ($draggingObj == null || $taskRow.is($targetTaskRow)){
       $(this).css('padding-top', '');
-      $draggingObj.find(".card").removeClass("has-background-grey-light");
       return
     }
 
@@ -155,7 +159,6 @@ var addDragEvent = function($obj) {
       });
     }
     $(this).css('padding-top', '');
-    $draggingObj.find(".card").removeClass("has-background-grey-light");
   });
 
   // dragenter, dragleave
@@ -266,19 +269,25 @@ var initTaskAddEvent = function($obj) {
       dataType: 'json'
     }).done(function (response, textStatus, jqXHR) {
       //追加タスクをかんばんに追加
-      $cardContent.find(".task-row-dummy").before(
+      $taskRowDummy = $cardContent.find(".task-row-dummy");
+      $taskRowDummy.before(
         `
-                    <div class="task-row card" draggable="true" data-sort="`+response.sort+`" data-task-id="`+response.task_id+`">
-                      <span class="task-name">`+$taskAddInput.val()+`</span>
-                      <input type="text" class="input is-small task-edit" style="display: none"/>
-                      <a data-remote="true" rele="nofollow" data-method="delete" href="/tasks/`+response.task_id+`">
-                        <i class="far fa-times-circle is-pulled-right"></i>
-                      </a>
-                      <i class="complete-flg far fa-square is-pulled-right"></i>
-                      <input type="hidden" name="task-id" value="`+response.task_id+`<%=task.id%>">
+                    <div class="task-row" draggable="true" data-sort="`+response.sort+`" data-task-id="`+response.task_id+`">
+                      <div class="card">
+                        <span class="task-name">`+$taskAddInput.val()+`</span>
+                        <input type="text" class="input is-small task-edit" style="display: none"/>
+                        <a data-remote="true" rele="nofollow" data-method="delete" href="/tasks/`+response.task_id+`">
+                          <i class="far fa-times-circle is-pulled-right"></i>
+                        </a>
+                        <i class="complete-flg far fa-square is-pulled-right"></i>
+                        <input type="hidden" name="task-id" value="`+response.task_id+`<%=task.id%>">
+                      </div>
                     </div>
         `
       );
+      //イベントリスナーの登録
+      initDragEvent($taskRowDummy.prev());
+      addDragEvent($taskRowDummy.prev());
       //inputの内容をリセット
       $taskAddInput.val("");
     }).fail(function (jqXHR, textStatus, errorThrown) {
