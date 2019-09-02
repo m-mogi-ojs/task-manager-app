@@ -274,12 +274,12 @@ var initTaskAddEvent = function($obj) {
         `
                     <div class="task-row" draggable="true" data-sort="`+response.sort+`" data-task-id="`+response.task_id+`">
                       <div class="card">
+                        <i class="complete-flg far fa-square is-pulled-right"></i>
                         <span class="task-name">`+$taskAddInput.val()+`</span>
                         <input type="text" class="input is-small task-edit" style="display: none"/>
                         <a data-remote="true" rele="nofollow" data-method="delete" href="/tasks/`+response.task_id+`">
                           <i class="far fa-times-circle is-pulled-right"></i>
                         </a>
-                        <i class="complete-flg far fa-square is-pulled-right"></i>
                         <input type="hidden" name="task-id" value="`+response.task_id+`<%=task.id%>">
                       </div>
                     </div>
