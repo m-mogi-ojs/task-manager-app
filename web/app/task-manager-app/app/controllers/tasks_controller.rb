@@ -52,16 +52,18 @@ class TasksController < ApplicationController
   def destroy
     @task = Task.includes(:kanban).find(params[:id])
     if @task.kanban.user_id == current_user.id
-      #sort順変更
-      Task.joins(:kanban)
-          .where(kanbans: {user_id: current_user.id})
-          .where(kanban_id: @task.kanban_id)
-          .where('sort > ?', @task.sort)
-          .find_each do |e|
-            e.sort = e.sort - 1
-            e.save!
-          end
-      @task.destroy
+      Task.transaction do
+        #sort順変更
+        Task.joins(:kanban)
+            .where(kanbans: {user_id: current_user.id})
+            .where(kanban_id: @task.kanban_id)
+            .where('sort > ?', @task.sort)
+            .find_each do |e|
+              e.sort = e.sort - 1
+              e.save!
+            end
+        @task.destroy
+      end
     end
     #render json: { response: 'ok'}
     redirect_to root_url
@@ -123,7 +125,7 @@ class TasksController < ApplicationController
         tasks.each_with_index do |e, i|
           if i == 0
             e.kanban_id = params[:task][:target_kanban_id]
-            e.sort = target_latest_task.first.sort + 1
+            e.sort = !target_latest_task.empty? ? target_latest_task.first.sort + 1 : 1
           else
             e.sort -= 1
           end
