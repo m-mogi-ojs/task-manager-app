@@ -4,39 +4,7 @@ $(function(){
   initTaskEditEvent($(".task-edit"));
   initTaskAddEvent($(".task-add"));
   initKanbanEvent();
-
-  // タスクチェックボックス処理
-  $(".complete-flg").click(function() {
-    $checkBox = $(this);
-    var hasChk = hasCheck($checkBox);
-    if (hasChk) {
-      $checkBox.removeClass("fa-check-square");
-      $checkBox.addClass("fa-square");
-    } else {
-      $checkBox.removeClass("fa-square");
-      $checkBox.addClass("fa-check-square");
-    }
-    $.ajax({
-      type: "PATCH",
-      url: "/tasks/" + $checkBox.parent().find('input[name="task-id"]').val(),
-      timeout: 10000,
-      cache: false,
-      data: {'task': {'complete_flg': hasChk === 1 ? 0 : 1}},
-      dataType: 'json'
-    }).done(function (response, textStatus, jqXHR) {
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-      alert("fail: Internal server error or not response");
-      if (!hasChk) {
-        $checkBox.removeClass("fa-check-square");
-        $checkBox.addClass("fa-square");
-      } else {
-        $checkBox.removeClass("fa-square");
-        $checkBox.addClass("fa-check-square");
-      }
-    }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-    });
-  });
+  initCompleteFlg($(".complete-flg"));
 
   // セレクトボックスの絞り込み
   $(".search-box").on('change', function(){
@@ -288,6 +256,7 @@ var initTaskAddEvent = function($obj) {
       //イベントリスナーの登録
       initDragEvent($taskRowDummy.prev());
       addDragEvent($taskRowDummy.prev());
+      initCompleteFlg($taskRowDummy.prev().find(".card").find(".complete-flg"))
       //inputの内容をリセット
       $taskAddInput.val("");
     }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -336,3 +305,37 @@ var initKanbanEvent = function() {
     });
   });
 }
+
+var initCompleteFlg = function($obj) {
+    $obj.click(function() {
+      $checkBox = $(this);
+      var hasChk = hasCheck($checkBox);
+      if (hasChk) {
+        $checkBox.removeClass("fa-check-square");
+        $checkBox.addClass("fa-square");
+      } else {
+        $checkBox.removeClass("fa-square");
+        $checkBox.addClass("fa-check-square");
+      }
+      $.ajax({
+        type: "PATCH",
+        url: "/tasks/" + $checkBox.parent().find('input[name="task-id"]').val(),
+        timeout: 10000,
+        cache: false,
+        data: {'task': {'complete_flg': hasChk === 1 ? 0 : 1}},
+        dataType: 'json'
+      }).done(function (response, textStatus, jqXHR) {
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+        alert("fail: Internal server error or not response");
+        if (!hasChk) {
+          $checkBox.removeClass("fa-check-square");
+          $checkBox.addClass("fa-square");
+        } else {
+          $checkBox.removeClass("fa-square");
+          $checkBox.addClass("fa-check-square");
+        }
+      }).always( function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+      });
+    });
+  }
